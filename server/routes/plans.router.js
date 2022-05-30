@@ -16,6 +16,6 @@ router
   .get(getPlan)
   .patch(authenticateUser, editPlan)
   .delete(authenticateUser, deletePlan);
-router.route("/vote").post(authenticateUser, votePlan);
+router.route("/:planId/vote").post(authenticateUser, votePlan);
 
 module.exports = router;
