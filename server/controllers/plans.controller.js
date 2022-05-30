@@ -1,4 +1,5 @@
 const plansService = require("../models/plans.service");
+const usersService = require("../models/users.service");
 const destinationsService = require("../models/destinations.service");
 const asyncErrorBoundary = require("../middleware/asyncErrorBoundary");
 
@@ -19,8 +20,25 @@ const planExists = async (req, res, next) => {
 // FUNCTIONS
 
 const getPlan = async (req, res) => {
-  const data = res.locals.plan;
-  res.json({ data });
+  const plan = res.locals.plan;
+  const destinations = await destinationsService.getDestinations(plan.plan_id);
+  const user = await usersService.getUser({ userId: plan.user_id });
+  res.json({
+    data: {
+      user: user.user_username,
+      plan_id: plan.plan_id,
+      title: plan.plan_title,
+      location: plan.plan_location,
+      duration: plan.plan_duration,
+      travel_time: plan.plan_travel_time,
+      destinations: destinations.map((destination) => {
+        return {
+          type: destination.destination_type,
+          address: destination.destination_address,
+        };
+      }),
+    },
+  });
 };
 
 const getAllPlans = async (req, res) => {
