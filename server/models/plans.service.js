@@ -23,11 +23,16 @@ const createPlan = ({ title, duration, location, travel_time }, userId) => {
     .then((createdRecords) => createdRecords[0]);
 };
 
-const editPlan = (planId) => {
-  return knex("users")
-    .select("*")
-    .where({ user_id: user_id })
-    .update({ user_email: user_email, user_username, user_username }, "*");
+const editPlan = ({ title, location, duration, travel_time }, planId) => {
+  return knex("plans").select("*").where({ plan_id: planId }).update(
+    {
+      plan_title: title,
+      plan_location: location,
+      plan_duration: duration,
+      plan_travel_time: travel_time,
+    },
+    "*"
+  );
 };
 
 const deletePlan = (planId) => {

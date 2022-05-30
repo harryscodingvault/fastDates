@@ -25,18 +25,20 @@ const getPlan = async (req, res) => {
   const user = await usersService.getUser({ userId: plan.user_id });
   res.json({
     data: {
-      user: user.user_username,
-      plan_id: plan.plan_id,
-      title: plan.plan_title,
-      location: plan.plan_location,
-      duration: plan.plan_duration,
-      travel_time: plan.plan_travel_time,
-      destinations: destinations.map((destination) => {
-        return {
-          type: destination.destination_type,
-          address: destination.destination_address,
-        };
-      }),
+      plan: {
+        user: user.user_username,
+        plan_id: plan.plan_id,
+        title: plan.plan_title,
+        location: plan.plan_location,
+        duration: plan.plan_duration,
+        travel_time: plan.plan_travel_time,
+        destinations: destinations.map((destination) => {
+          return {
+            type: destination.destination_type,
+            address: destination.destination_address,
+          };
+        }),
+      },
     },
   });
 };
@@ -85,8 +87,46 @@ const createPlan = async (req, res) => {
 };
 
 const editPlan = async (req, res) => {
-  console.log("user", req.user);
-  res.send("editPlan");
+  const plan = res.locals.plan;
+  if (req.user.userId === plan.user_id) {
+    const newPlan = req.body.data;
+    const { title, location, duration, travel_time, destinations } = newPlan;
+
+    const editedPlan = await plansService.editPlan(
+      { title, location, duration, travel_time },
+      plan.plan_id
+    );
+    console.log("editedPlan", editedPlan);
+    await destinationsService.deleteDestinations(plan.plan_id);
+    destinations.map(async (destination) => {
+      return await destinationsService.createDestination(
+        destination,
+        plan.plan_id
+      );
+    });
+    const plan_destinations = await destinationsService.getDestinations(
+      plan.plan_id
+    );
+
+    return res.json({
+      data: {
+        plan: {
+          plan_id: editedPlan[0].plan_id,
+          title: editedPlan[0].plan_title,
+          duration: editedPlan[0].plan_duration,
+          location: editedPlan[0].plan_location,
+          travel_time: editedPlan[0].plan_travel_time,
+          destinations: plan_destinations.map((destination) => {
+            return {
+              type: destination.destination_type,
+              address: destination.destination_address,
+            };
+          }),
+        },
+      },
+    });
+  }
+  res.status(404).json({ msg: "Action not allowed!" });
 };
 
 const deletePlan = async (req, res) => {
@@ -104,9 +144,9 @@ const votePlan = async (req, res) => {
 
 module.exports = {
   getPlan: [asyncErrorBoundary(planExists), asyncErrorBoundary(getPlan)],
-  getAllPlans,
+  getAllPlans: [asyncErrorBoundary(getAllPlans)],
   createPlan: [asyncErrorBoundary(createPlan)],
-  editPlan,
+  editPlan: [asyncErrorBoundary(planExists), asyncErrorBoundary(editPlan)],
   deletePlan: [asyncErrorBoundary(planExists), asyncErrorBoundary(deletePlan)],
   votePlan,
 };

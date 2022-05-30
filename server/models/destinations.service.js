@@ -17,17 +17,12 @@ const createDestination = ({ type, address }, planId) => {
     .then((createdRecords) => createdRecords[0]);
 };
 
-const editDestination = (planId) => {
-  return knex("destinations").select("*").where({ plan_id: planId }).first();
-};
-
-const deleteDestination = (planId) => {
-  return knex("destinations").select("*");
+const deleteDestinations = (planId) => {
+  return knex("destinations").select({ plan_id: planId }).del();
 };
 
 module.exports = {
   getDestinations,
   createDestination,
-  editDestination,
-  deleteDestination,
+  deleteDestinations,
 };
