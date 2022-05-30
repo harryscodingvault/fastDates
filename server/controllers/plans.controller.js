@@ -90,7 +90,12 @@ const editPlan = async (req, res) => {
 };
 
 const deletePlan = async (req, res) => {
-  res.send("deletePlan ");
+  const plan = res.locals.plan;
+  if (req.user.userId === plan.user_id) {
+    await plansService.deletePlan(plan.plan_id);
+    return res.send("Plan deleted!");
+  }
+  res.status(404).json({ msg: "Action not allowed!" });
 };
 
 const votePlan = async (req, res) => {
@@ -102,6 +107,6 @@ module.exports = {
   getAllPlans,
   createPlan: [asyncErrorBoundary(createPlan)],
   editPlan,
-  deletePlan,
+  deletePlan: [asyncErrorBoundary(planExists), asyncErrorBoundary(deletePlan)],
   votePlan,
 };

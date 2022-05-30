@@ -31,10 +31,7 @@ const editPlan = (planId) => {
 };
 
 const deletePlan = (planId) => {
-  return knex("users")
-    .select("*")
-    .where({ user_id: user_id })
-    .update({ user_email: user_email, user_username, user_username }, "*");
+  return knex("plans").select("*").where({ plan_id: planId }).del();
 };
 
 module.exports = {
