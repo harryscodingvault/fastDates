@@ -8,11 +8,7 @@ const userExistAuth = async (req, res, next) => {
   const { userId } = req.params;
   const user = await userService.getUser({ userId });
 
-  const authHeader = req.headers.authorization;
-  const token = authHeader.split(" ")[1];
-  const payload = jwt.verify(token, process.env.JWT_SECRET);
-
-  if (user.user_id === payload.id) {
+  if (user.user_id === req.user.userId) {
     res.locals.user = user;
     return next();
   }

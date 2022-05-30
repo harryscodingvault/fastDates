@@ -13,6 +13,4 @@ router
   .patch(authenticateUser, updateUser)
   .delete(authenticateUser, deleteUser);
 
-//Routes
-
 module.exports = router;

@@ -1,4 +1,4 @@
-const authService = require("../models/auth.services");
+const authService = require("../models/auth.service");
 const userService = require("../models/users.service");
 const asyncErrorBoundary = require("../middleware/asyncErrorBoundary");
 const hasProperties = require("../middleware/hasProperties");
