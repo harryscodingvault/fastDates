@@ -6,8 +6,8 @@ const {
   createPlan,
   editPlan,
   deletePlan,
-  votePlan,
 } = require("../controllers/plans.controller");
+const { votePlan, getVotesCount } = require("../controllers/votes.controller");
 const authenticateUser = require("../middleware/auth");
 
 router.route("/").get(getAllPlans).post(authenticateUser, createPlan);
@@ -16,6 +16,9 @@ router
   .get(getPlan)
   .patch(authenticateUser, editPlan)
   .delete(authenticateUser, deletePlan);
-router.route("/:planId/vote").post(authenticateUser, votePlan);
+router
+  .route("/:planId/vote")
+  .get(getVotesCount)
+  .post(authenticateUser, votePlan);
 
 module.exports = router;

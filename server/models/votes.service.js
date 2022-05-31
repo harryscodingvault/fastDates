@@ -20,8 +20,16 @@ const updateVote = (updatedVote) => {
     .update(updatedVote, "*");
 };
 
+const voteCount = (planId, { upvote, downvote }) => {
+  return knex("votes")
+    .count()
+    .where({ plan_id: planId, vote_up: upvote, vote_down: downvote })
+    .first();
+};
+
 module.exports = {
   getVote,
   updateVote,
   createVote,
+  voteCount,
 };

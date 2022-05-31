@@ -36,6 +36,7 @@ const getPlan = async (req, res) => {
         destinations: destinations.map((destination) => {
           return {
             type: destination.destination_type,
+            name: destination.destination_name,
             address: destination.destination_address,
           };
         }),
@@ -59,7 +60,7 @@ const createPlan = async (req, res) => {
   const saved_plan = await plansService.createPlan(newPlan, user.userId);
 
   destinations.map(async (destination) => {
-    return await destinationsService.createDestination(
+    await destinationsService.createDestination(
       destination,
       saved_plan.plan_id
     );
@@ -67,6 +68,7 @@ const createPlan = async (req, res) => {
   const saved_destinations = await destinationsService.getDestinations(
     saved_plan.plan_id
   );
+  console.log("saved_destinations", saved_destinations);
 
   return res.json({
     data: {
@@ -79,6 +81,7 @@ const createPlan = async (req, res) => {
         destinations: saved_destinations.map((destination) => {
           return {
             type: destination.destination_type,
+            name: destination.destination_name,
             address: destination.destination_address,
           };
         }),
@@ -139,60 +142,10 @@ const deletePlan = async (req, res) => {
   res.status(404).json({ msg: "Action not allowed!" });
 };
 
-const votePlan = async (req, res) => {
-  const plan = res.locals.plan;
-  if (req.user.userId === plan.user_id) {
-    const vote = await votesService.getVote(plan.plan_id, plan.user_id);
-    let newVote = req.body.data;
-
-    if (vote) {
-      console.log(vote);
-      const updatedVote = {
-        vote_id: vote.vote_id,
-        vote_up: newVote.vote_up,
-        vote_down: newVote.vote_down,
-        user_id: plan.user_id,
-        plan_id: plan.plan_id,
-      };
-      const updateVote = await votesService.updateVote(updatedVote);
-      return res.json({
-        data: {
-          vote: {
-            plan_id: updateVote[0].plan_id,
-            vote_up: updateVote[0].vote_up,
-            vote_down: updateVote[0].vote_down,
-            user_id: updateVote[0].user_id,
-          },
-        },
-      });
-    }
-    newVote = {
-      vote_up: newVote.vote_up,
-      vote_down: newVote.vote_down,
-      user_id: req.user.userId,
-      plan_id: plan.plan_id,
-    };
-    console.log(newVote);
-    const saved_vote = await votesService.createVote(newVote);
-    return res.json({
-      data: {
-        vote: {
-          plan_id: saved_vote.plan_id,
-          vote_up: saved_vote.vote_up,
-          vote_down: saved_vote.vote_down,
-          user_id: saved_vote.user_id,
-        },
-      },
-    });
-  }
-  res.status(404).json({ msg: "Action not allowed!" });
-};
-
 module.exports = {
   getPlan: [asyncErrorBoundary(planExists), asyncErrorBoundary(getPlan)],
   getAllPlans: [asyncErrorBoundary(getAllPlans)],
   createPlan: [asyncErrorBoundary(createPlan)],
   editPlan: [asyncErrorBoundary(planExists), asyncErrorBoundary(editPlan)],
   deletePlan: [asyncErrorBoundary(planExists), asyncErrorBoundary(deletePlan)],
-  votePlan: [asyncErrorBoundary(planExists), asyncErrorBoundary(votePlan)],
 };
