@@ -3,6 +3,7 @@ const usersService = require("../models/users.service");
 const destinationsService = require("../models/destinations.service");
 const votesService = require("../models/votes.service");
 const asyncErrorBoundary = require("../middleware/asyncErrorBoundary");
+const moment = require("moment");
 
 // VALIDATORS
 
@@ -17,6 +18,20 @@ const planExists = async (req, res, next) => {
 
   next({ status: 404, message: `Plan cannot be found.` });
 };
+
+// UTILS
+
+function getLastWeek() {
+  return moment().subtract(7, "day").calendar();
+}
+
+function getLastMonth() {
+  return moment().subtract(30, "day").calendar();
+}
+
+function getLastYear() {
+  return moment().subtract(1, "year").calendar();
+}
 
 // FUNCTIONS
 
@@ -48,10 +63,27 @@ const getPlan = async (req, res) => {
 };
 
 const getAllPlans = async (req, res) => {
-  const { location, duration, time } = req.query;
-  const sLocation = location?.split("-").join(", ");
-  console.log(sLocation);
-  const data = await plansService.listPlans({ location });
+  const { location, duration, time, page } = req.query;
+
+  const sPage = page;
+  const sLocation = location?.split("-").join(", ") || "n";
+  const sDuration = duration
+    ? [parseInt(duration?.split("-")[0]), parseInt(duration?.split("-")[1])]
+    : [0, 10];
+
+  const sTime = {
+    week: getLastWeek(),
+    month: getLastMonth(),
+    year: getLastYear(),
+  };
+  const fromT = moment(sTime[time] || sTime.year).format("YYYY/MM/DD");
+
+  const data = await plansService.listPlans({
+    sLocation,
+    fromT,
+    sDuration,
+    sPage,
+  });
   res.json({ data });
 };
 

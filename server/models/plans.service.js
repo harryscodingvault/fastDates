@@ -1,10 +1,25 @@
 const knex = require("../db/connection.js");
+const moment = require("moment");
+const paginate = require("knex-paginate");
 
-const listPlans = ({ location }) => {
-  if (location) {
-    return knex("plans").select("*").where({ plan_location: location });
+const listPlans = ({ sLocation, fromT, sDuration, sPage }) => {
+  const currentTime = moment().format("YYYY/MM/DD");
+  console.log({ currentTime, fromT });
+  if (sLocation !== "n") {
+    return (
+      knex("plans")
+        .select("*")
+        .where({ plan_location: sLocation })
+        .whereBetween("plan_duration", [sDuration[0], sDuration[1]])
+        //.whereBetween("created_at", [fromT, currentTime])
+        .orderBy("plan_upvotes", "asc")
+        .paginate({ perPage: 20, currentPage: sPage })
+    );
   }
-  return knex("plans").select("*");
+  return knex("plans")
+    .select("*")
+    .orderBy("plan_upvotes", "asc")
+    .paginate({ perPage: 20, currentPage: sPage });
 };
 
 const getPlan = (planId) => {

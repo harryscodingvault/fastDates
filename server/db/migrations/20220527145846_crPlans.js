@@ -2,7 +2,7 @@ exports.up = function (knex) {
   return knex.schema.createTable("plans", (table) => {
     table.increments("plan_id").primary();
     table.string("plan_title");
-    table.string("plan_duration");
+    table.integer("plan_duration");
     table.string("plan_location");
     table.string("plan_travel_time");
     table.integer("plan_upvotes");
