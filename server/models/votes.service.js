@@ -20,7 +20,27 @@ const updateVote = (updatedVote) => {
     .update(updatedVote, "*");
 };
 
-const voteCount = (planId, { upvote, downvote }) => {
+const updateVoteCount = async (planId) => {
+  const upvoteCount = await knex("votes")
+    .count()
+    .where({ plan_id: planId, vote_up: true })
+    .first();
+
+  const downvoteCount = await knex("votes")
+    .count()
+    .where({ plan_id: planId, vote_down: true })
+    .first();
+  console.log("updateVoteCount", upvoteCount, downvoteCount);
+  return knex("plans")
+    .select("*")
+    .where({ plan_id: planId })
+    .update(
+      { plan_upvotes: upvoteCount.count, plan_downvotes: downvoteCount.count },
+      "*"
+    );
+};
+
+const getVoteCount = (planId, { upvote, downvote }) => {
   return knex("votes")
     .count()
     .where({ plan_id: planId, vote_up: upvote, vote_down: downvote })
@@ -31,5 +51,6 @@ module.exports = {
   getVote,
   updateVote,
   createVote,
-  voteCount,
+  getVoteCount,
+  updateVoteCount,
 };

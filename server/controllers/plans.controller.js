@@ -33,6 +33,8 @@ const getPlan = async (req, res) => {
         location: plan.plan_location,
         duration: plan.plan_duration,
         travel_time: plan.plan_travel_time,
+        upvotes: plan.plan_upvotes,
+        downvotes: plan.plan_downvotes,
         destinations: destinations.map((destination) => {
           return {
             type: destination.destination_type,
@@ -46,7 +48,10 @@ const getPlan = async (req, res) => {
 };
 
 const getAllPlans = async (req, res) => {
-  const data = await plansService.listPlans();
+  const { location, duration, time } = req.query;
+  const sLocation = location?.split("-").join(", ");
+  console.log(sLocation);
+  const data = await plansService.listPlans({ location });
   res.json({ data });
 };
 
@@ -59,7 +64,7 @@ const createPlan = async (req, res) => {
 
   const saved_plan = await plansService.createPlan(newPlan, user.userId);
 
-  destinations.map(async (destination) => {
+  destinations.slice(0, 5).map(async (destination) => {
     await destinationsService.createDestination(
       destination,
       saved_plan.plan_id
@@ -68,7 +73,6 @@ const createPlan = async (req, res) => {
   const saved_destinations = await destinationsService.getDestinations(
     saved_plan.plan_id
   );
-  console.log("saved_destinations", saved_destinations);
 
   return res.json({
     data: {
@@ -100,9 +104,9 @@ const editPlan = async (req, res) => {
       { title, location, duration, travel_time },
       plan.plan_id
     );
-    console.log("editedPlan", editedPlan);
+
     await destinationsService.deleteDestinations(plan.plan_id);
-    destinations.map(async (destination) => {
+    destinations.slice(0, 5).map(async (destination) => {
       return await destinationsService.createDestination(
         destination,
         plan.plan_id

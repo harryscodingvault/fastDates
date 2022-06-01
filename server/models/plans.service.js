@@ -1,6 +1,9 @@
 const knex = require("../db/connection.js");
 
-const listPlans = () => {
+const listPlans = ({ location }) => {
+  if (location) {
+    return knex("plans").select("*").where({ plan_location: location });
+  }
   return knex("plans").select("*");
 };
 

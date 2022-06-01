@@ -1,6 +1,4 @@
 const plansService = require("../models/plans.service");
-const usersService = require("../models/users.service");
-const destinationsService = require("../models/destinations.service");
 const votesService = require("../models/votes.service");
 const asyncErrorBoundary = require("../middleware/asyncErrorBoundary");
 
@@ -22,11 +20,11 @@ const planExists = async (req, res, next) => {
 
 const getVotesCount = async (req, res) => {
   const plan = res.locals.plan;
-  const votesUp = await votesService.voteCount(plan.plan_id, {
+  const votesUp = await votesService.getVoteCount(plan.plan_id, {
     upvote: true,
     downvote: false,
   });
-  const votesDown = await votesService.voteCount(plan.plan_id, {
+  const votesDown = await votesService.getVoteCount(plan.plan_id, {
     upvote: false,
     downvote: true,
   });
@@ -56,6 +54,8 @@ const votePlan = async (req, res) => {
         plan_id: plan.plan_id,
       };
       const updateVote = await votesService.updateVote(updatedVote);
+      await votesService.updateVoteCount(plan.plan_id);
+
       return res.json({
         data: {
           vote: {
@@ -73,7 +73,9 @@ const votePlan = async (req, res) => {
       user_id: req.user.userId,
       plan_id: plan.plan_id,
     };
+
     const saved_vote = await votesService.createVote(newVote);
+    await votesService.updateVoteCount(plan.plan_id);
     return res.json({
       data: {
         vote: {
