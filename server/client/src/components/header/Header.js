@@ -20,7 +20,13 @@ const Header = () => {
         </div>
       )}
       {user ? (
-        <div className="header-nav" onClick={() => dispatch(logoutUser())}>
+        <div
+          className="header-nav"
+          onClick={() => {
+            dispatch(logoutUser());
+            navigate("/");
+          }}
+        >
           <h5>Logout</h5>
         </div>
       ) : (

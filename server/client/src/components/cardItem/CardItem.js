@@ -28,6 +28,14 @@ const CardItem = ({ data }) => {
 
   return (
     <div className="cardItem-container">
+      <div className="cardItem-voting--btn-group">
+        <button className="btn">
+          <ArrowUpwardIcon /> {upvotes}
+        </button>
+        <button className="btn">
+          <ArrowDownwardIcon /> {downvotes}
+        </button>
+      </div>
       <div className="cardItem-text-group">
         <p>Creator: {creator}</p>
         <h4>{title}</h4>
@@ -42,14 +50,6 @@ const CardItem = ({ data }) => {
         </h5>
       </div>
 
-      <div className="cardItem-voting--btn-group">
-        <button className="btn">
-          <ArrowUpwardIcon /> {upvotes}
-        </button>
-        <button className="btn">
-          <ArrowDownwardIcon /> {downvotes}
-        </button>
-      </div>
       <div className="cardItem-destinations-container">
         <ul className="cardItem-destinations-list">{mapDestinations}</ul>
       </div>

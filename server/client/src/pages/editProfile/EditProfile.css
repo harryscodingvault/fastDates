@@ -1,0 +1,21 @@
+.edit-profile-container{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    width: 100%;
+    height:87vh;
+}
+
+
+.edit-profile-btn-group{
+   width: 100%;
+   display: flex;
+   flex-direction: row;
+   align-items:center;
+   justify-content: space-around;
+}
+
+.edit-profile-btn-group .btn{
+    width: 40%;
+ }

@@ -17,7 +17,10 @@ const Login = () => {
   const [alert, setAlert] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  user && navigate("/");
+
+  useEffect(() => {
+    user && navigate("/");
+  }, [user]);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -46,7 +49,6 @@ const Login = () => {
     setAlert(messageAlert);
     if (!alert.length) {
       dispatch(loginUser({ data: { email, password } }));
-      navigate("/");
     }
   };
 

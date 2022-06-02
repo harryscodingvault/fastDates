@@ -1,27 +1,26 @@
 import React, { useState, useEffect } from "react";
-import "./Register.css";
-import { Link, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import FormInput from "../../components/formInput/FormInput";
-import { registerUser } from "../../features/user/userSlice";
+import { updateUser } from "../../features/user/userSlice";
+import "./EditProfile.css";
 
-const initialState = {
-  username: "",
-  email: "",
-  password: "",
-  confirm_password: "",
-};
-
-const Register = () => {
-  const [values, setValues] = useState(initialState);
+const EditProfile = () => {
   const { isLoading, error_message, user } = useSelector((store) => store.user);
+
+  const [values, setValues] = useState({
+    username: user?.user.username || "",
+    email: user?.user.email || "",
+    password: "",
+    confirm_password: "",
+  });
+
   const [alert, setAlert] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    user && navigate("/");
+    !user && navigate("/");
   }, [user]);
 
   const handleChange = (e) => {
@@ -64,24 +63,26 @@ const Register = () => {
     }
     setAlert(messageAlert);
     if (!alert.length) {
-      dispatch(registerUser({ data: { username, email, password } }));
-      navigate("/login");
+      dispatch(
+        updateUser({
+          data: { username, email, password },
+        })
+      );
     }
   };
-
   return (
-    <div className="login-container">
+    <div className="edit-profile-container">
       <form className="form" onSubmit={onSubmit}>
-        <h3>Register</h3>
+        <h3>Edit Profile</h3>
         {alert.includes("username") && (
           <div className="alert alert-danger">Check Username</div>
         )}
         <FormInput
           type="text"
           name="username"
-          value={values.username}
+          values={values.username}
           handleChange={handleChange}
-          placeholder="Username"
+          placeholder={values.username}
         />
         {alert.includes("email") && (
           <div className="alert alert-danger">Check Email</div>
@@ -89,9 +90,9 @@ const Register = () => {
         <FormInput
           type="email"
           name="email"
-          value={values.email}
+          values={values.email}
           handleChange={handleChange}
-          placeholder="Email"
+          placeholder={values.email}
         />
         {alert.includes("password") && (
           <div className="alert alert-danger">Passwords do not Match</div>
@@ -99,7 +100,7 @@ const Register = () => {
         <FormInput
           type="password"
           name="password"
-          value={values.password}
+          values={values.password}
           handleChange={handleChange}
           placeholder="Password"
         />
@@ -109,27 +110,32 @@ const Register = () => {
         <FormInput
           type="password"
           name="confirm_password"
-          value={values.confirm_password}
+          values={values.confirm_password}
           handleChange={handleChange}
           placeholder="Confirm Password"
         />
-        {error_message.origin === "registerUser" && (
+        {error_message.origin === "updateUser" && (
           <div className="alert alert-danger">{error_message.message}</div>
         )}
         {isLoading ? (
           <div className="spinner"></div>
         ) : (
-          <button className="btn btn-block" type="submit">
-            <h5>Submit</h5>
-          </button>
+          <div className="edit-profile-btn-group">
+            <button className="btn" type="submit">
+              <h5>Submit</h5>
+            </button>
+            <button
+              className="btn"
+              type="button"
+              onClick={() => navigate("/profile")}
+            >
+              <h5>Cancel</h5>
+            </button>
+          </div>
         )}
       </form>
-      <div className="check-account">
-        <p>Got an account?</p>
-        <Link to="/login">Login</Link>
-      </div>
     </div>
   );
 };
 
-export default Register;
+export default EditProfile;

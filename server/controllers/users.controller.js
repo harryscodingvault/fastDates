@@ -36,12 +36,13 @@ const getUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const { email, username } = req.body.data;
+  const { email, username, password } = req.body.data;
   const { user_id } = res.locals.user;
   const updatedUser = {
     user_id: user_id,
     user_email: email,
     user_username: username,
+    user_password: password,
   };
   const data = await userService.updateUser(updatedUser);
   const { user_email, user_username } = data[0];

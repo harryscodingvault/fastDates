@@ -29,6 +29,28 @@ export const loginUser = createAsyncThunk(
   async (user, thunkAPI) => {
     try {
       const res = await originFetch.post("/auth/login", user);
+
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response.data.message);
+    }
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  "user/updateUser",
+  async (user, thunkAPI) => {
+    try {
+      const res = await originFetch.patch(
+        `/users/${thunkAPI.getState().user.user.user.id}`,
+        user,
+        {
+          headers: {
+            authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
+          },
+        }
+      );
+
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response.data.message);
@@ -74,6 +96,23 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error_message = {
         origin: "loginUser",
+        message: payload || "Fill all fields",
+      };
+    },
+
+    [updateUser.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [updateUser.fulfilled]: (state) => {
+      state.user = null;
+      removeUserFromLocalStorage();
+      state.isLoading = false;
+      state.error_message = "";
+    },
+    [updateUser.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+      state.error_message = {
+        origin: "updateUser",
         message: payload || "Fill all fields",
       };
     },

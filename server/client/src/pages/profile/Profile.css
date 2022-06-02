@@ -1,0 +1,25 @@
+.profile-container{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    width: 100%;
+    height:87vh;
+}
+
+.profile-text-group{
+    display:flex;
+    flex-direction:column;
+    margin-bottom: 2rem;
+    width: 80%;
+    align-items:flex-start;
+   
+}
+.profile-text-group h5{
+    margin: 0;
+  
+}
+
+.profile-text-group span{
+    color: var(--primary-500);
+}

@@ -9,6 +9,9 @@ import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import CreatePlan from "./pages/createPlan/CreatePlan";
 import Error from "./pages/error/Error";
+import Profile from "./pages/profile/Profile";
+import EditProfile from "./pages/editProfile/EditProfile";
+import EditPlan from "./pages/editPlan/EditPlan";
 
 function App() {
   return (
@@ -18,8 +21,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/createplan" element={<CreatePlan />} />
+          <Route path="/editPlan" element={<EditPlan />} />
+
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/edit" element={<EditProfile />} />
           <Route path="/*" element={<Error />} />
         </Routes>
         <Footer />
