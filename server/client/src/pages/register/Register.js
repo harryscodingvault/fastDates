@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Register.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import FormInput from "../../components/formInput/FormInput";
@@ -15,9 +15,11 @@ const initialState = {
 
 const Register = () => {
   const [values, setValues] = useState(initialState);
-  const { user, isLoading } = useSelector((store) => store.user);
+  const { isLoading, error_message, user } = useSelector((store) => store.user);
   const [alert, setAlert] = useState([]);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  user && navigate("/");
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -59,7 +61,8 @@ const Register = () => {
     }
     setAlert(messageAlert);
     if (!alert.length) {
-      dispatch(registerUser({ username, email, password }));
+      dispatch(registerUser({ data: { username, email, password } }));
+      navigate("/login");
     }
   };
 
@@ -107,10 +110,16 @@ const Register = () => {
           handleChange={handleChange}
           placeholder="Confirm Password"
         />
-
-        <button className="btn btn-block" type="submit">
-          <h5>Submit</h5>
-        </button>
+        {error_message.origin === "registerUser" && (
+          <div className="alert alert-danger">{error_message.message}</div>
+        )}
+        {isLoading ? (
+          <div className="spinner"></div>
+        ) : (
+          <button className="btn btn-block" type="submit">
+            <h5>Submit</h5>
+          </button>
+        )}
       </form>
       <div className="check-account">
         <p>Got an account?</p>

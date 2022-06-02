@@ -2,8 +2,10 @@ import React from "react";
 import "./CardItems.css";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import { useSelector } from "react-redux";
 
-const cardItem = ({ data }) => {
+const CardItem = ({ data }) => {
+  const { user } = useSelector((store) => store.user);
   const {
     creator,
     duration,
@@ -51,12 +53,14 @@ const cardItem = ({ data }) => {
       <div className="cardItem-destinations-container">
         <ul className="cardItem-destinations-list">{mapDestinations}</ul>
       </div>
-      <div className="cardItem-edit-btn-group">
-        <button className="btn">Edit</button>
-        <button className="btn">Delete</button>
-      </div>
+      {user && (
+        <div className="cardItem-edit-btn-group">
+          <button className="btn">Edit</button>
+          <button className="btn">Delete</button>
+        </div>
+      )}
     </div>
   );
 };
 
-export default cardItem;
+export default CardItem;

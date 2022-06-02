@@ -62,7 +62,3 @@ export const users = [
     username: "Amellie",
   },
 ];
-
-export const createUser = ({ username, password, email }) => {
-  users.push({ id: users.length + 1, username, email, password });
-};

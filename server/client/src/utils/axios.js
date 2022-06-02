@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const originFetch = axios.create({
-  baseUrl: "thisUrl",
+  baseURL: "http://localhost:5000/api",
 });
 
 export default originFetch;
