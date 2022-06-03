@@ -10,32 +10,28 @@ const CardItem = ({ data }) => {
     user_id,
     plan_duration,
     plan_title,
-    plan_upvotes,
-    plan_downvotes,
+    plan_votes,
     plan_location,
+    destinations,
   } = data;
 
-  /*
-  const mapDestinations = destinations.map((item) => (
-    <li key={item.name}>
+  const mapDestinations = destinations.map((destination) => (
+    <li key={destination.destination_id}>
       <p>
-        <span>{item.type}</span>
+        <span>{destination.destination_type}</span>
       </p>
-      <h5>{item.name}</h5>
+      <h5>{destination.destination_name}</h5>
     </li>
   ));
-   <div className="cardItem-destinations-container">
-        <ul className="cardItem-destinations-list">{mapDestinations}</ul>
-      </div>
-*/
+
   return (
     <div className="cardItem-container">
       <div className="cardItem-voting--btn-group">
         <button className="btn">
-          <ArrowUpwardIcon /> {plan_upvotes}
+          <ArrowUpwardIcon />
         </button>
         <button className="btn">
-          <ArrowDownwardIcon /> {plan_downvotes}
+          <ArrowDownwardIcon /> {plan_votes}
         </button>
       </div>
       <div className="cardItem-text-group">
@@ -48,7 +44,9 @@ const CardItem = ({ data }) => {
           Duration: <span>{plan_duration}h</span>
         </h5>
       </div>
-
+      <div className="cardItem-destinations-container">
+        <ul className="cardItem-destinations-list">{mapDestinations}</ul>
+      </div>
       {user && (
         <div className="cardItem-edit-btn-group">
           <button className="btn">Edit</button>

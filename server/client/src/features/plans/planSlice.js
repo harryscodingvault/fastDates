@@ -105,9 +105,9 @@ const planSlice = createSlice({
       state.isLoading = true;
     },
     [getAllPlans.fulfilled]: (state, { payload }) => {
-      const { data } = payload.data;
-      state.plans = data;
-
+      const { plans, paginate } = payload.data;
+      state.plans = plans;
+      state.currentPage = paginate.currentPage;
       state.isLoading = false;
       state.error_message = { origin: "", message: "" };
     },
