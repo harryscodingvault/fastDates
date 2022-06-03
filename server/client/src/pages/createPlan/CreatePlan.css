@@ -4,3 +4,27 @@
     align-items: center;
     justify-content: center;
 }
+
+.create-plan-container .btn-add{
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 20%;
+   background-color: var(--primary-500);
+   cursor: pointer;
+}
+
+.create-plan-container .btn-add:hover{
+    background-color: var(--blue-light);
+ }
+ .create-plan-container .btn-add:active{
+    background-color: var(--blue-dark);
+ }
+ 
+
+.create-plan-destinations-group{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
