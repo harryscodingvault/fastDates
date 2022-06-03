@@ -135,15 +135,17 @@ const planSlice = createSlice({
     [createPlan.pending]: (state) => {
       state.isLoading = true;
     },
-    [createPlan.fulfilled]: (state) => {
+    [createPlan.fulfilled]: (state, { payload }) => {
       state.isLoading = false;
       state.error_message = "";
+      const { plan } = payload.data;
+      state.currentPlan = plan;
     },
     [createPlan.rejected]: (state, { payload }) => {
       state.isLoading = false;
       state.error_message = {
-        origin: "getPlan",
-        message: payload || "Cant get plan :(",
+        origin: "createPlan",
+        message: payload || "Cant create plan :(",
       };
     },
   },

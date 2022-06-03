@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FormInput from "../../components/formInput/FormInput";
 import "./CreatePlan.css";
@@ -14,7 +14,12 @@ const initialState = {
 
 const CreatePlan = () => {
   const [values, setValues] = useState(initialState);
-  const [destinations, setDestinations] = useState([{ name: "", address: "" }]);
+  const [destinations, setDestinations] = useState([
+    { name: "", address: "", type: "" },
+  ]);
+  const { error_message, isLoading, currentPlan } = useSelector(
+    (store) => store.plan
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -33,12 +38,14 @@ const CreatePlan = () => {
       return (
         item.address !== "" &&
         item.name !== "" &&
+        item.type !== "" &&
         item.hasOwnProperty("address") &&
         item.hasOwnProperty("name") &&
+        item.hasOwnProperty("type") &&
         Object.keys(item).length !== 0
       );
     });
-    console.log("filteredD", filteredD);
+
     if (
       filteredD.length >= 1 &&
       duration !== "" &&
@@ -46,9 +53,11 @@ const CreatePlan = () => {
       location !== ""
     ) {
       const plan = { title, location, duration, destinations: filteredD };
-      //dispatch(createPlan(plan));
-      //console.log("plan", plan);
-      //navigate("/");
+      dispatch(createPlan({ data: plan }));
+
+      if (!error_message.message && currentPlan) {
+        navigate("/");
+      }
     }
   };
 
@@ -80,6 +89,13 @@ const CreatePlan = () => {
           handleChange={(e) => arrayHandler(e)}
           placeholder="Destination Address"
         />
+        <FormInput
+          type="text"
+          name="type"
+          value={destination.type}
+          handleChange={(e) => arrayHandler(e)}
+          placeholder="Destination Type"
+        />
       </div>
     );
   });
@@ -88,6 +104,7 @@ const CreatePlan = () => {
     <div className="create-plan-container">
       <form className="form" onSubmit={onSubmit}>
         <h3>Create Plan</h3>
+
         <FormInput
           type="text"
           name="title"
@@ -122,10 +139,17 @@ const CreatePlan = () => {
             <h2>+</h2>
           </div>
         )}
+        {error_message.origin === "createPlan" && (
+          <div className="alert alert-danger">{error_message.message}</div>
+        )}
 
-        <button className="btn btn-block" type="submit">
-          <h5>Submit</h5>
-        </button>
+        {isLoading ? (
+          <div className="spinner"></div>
+        ) : (
+          <button className="btn btn-block" type="submit">
+            <h5>Submit</h5>
+          </button>
+        )}
       </form>
     </div>
   );
