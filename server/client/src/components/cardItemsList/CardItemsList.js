@@ -10,14 +10,31 @@ const CardItemsList = () => {
   const { isLoading, error_message, plans } = useSelector(
     (store) => store.plan
   );
+  const dispatch = useDispatch();
+  console.log(plans);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    dispatch(getAllPlans());
+  }, []);
 
-  const renderList = travels.map((item) => (
-    <CardItem data={item} key={item.id} />
+  const listPlans = plans?.map((plan) => (
+    <CardItem data={plan} key={plan.plan_id} />
   ));
+  if (!plans.length) {
+    return (
+      <div className="cardItemsList-container">
+        <h5>Not jobs to display</h5>
+      </div>
+    );
+  }
 
-  return <div className="cardItemsList-container">{renderList}</div>;
+  return plans ? (
+    <div className="cardItemsList-container">{listPlans}</div>
+  ) : (
+    <div className="cardItemsList-container">
+      <div className="spinner"></div>
+    </div>
+  );
 };
 
 export default CardItemsList;

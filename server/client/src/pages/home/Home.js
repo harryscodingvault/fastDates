@@ -3,33 +3,24 @@ import CardItemsList from "../../components/cardItemsList/CardItemsList";
 import "./Home.css";
 import { useSelector, useDispatch } from "react-redux";
 
-import { getAllPlans } from "../../features/plans/planSlice";
+import { handleChange } from "../../features/plans/planSlice";
 
 import FormInput from "../../components/formInput/FormInput";
 
 const Home = () => {
-  const [values, setValues] = useState({
-    state: "",
-    city: "",
-    time: "",
-    duration: null,
-  });
   const { user } = useSelector((store) => store.user);
-  const { timeOptions, durationOptions } = useSelector((store) => store.plan);
+  const { timeOptions, durationOptions, time, duration, location } =
+    useSelector((store) => store.plan);
   const dispatch = useDispatch();
 
-  const handleChange = (e) => {
+  const handlePlanInput = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    setValues({ ...values, [name]: value });
-    console.log("values", values);
+    dispatch(handleChange({ name, value }));
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const { state, city, time, duration } = values;
-
-    console.log("values", values);
   };
 
   return (
@@ -40,32 +31,22 @@ const Home = () => {
         </button>
       )}
       <form className="home-search-form form" onSubmit={onSubmit}>
-        <div className="home-input-group">
-          <FormInput
-            classname="home-input-city"
-            type="city"
-            name="city"
-            values={values.city}
-            handleChange={handleChange}
-            placeholder="City"
-          />
-          <FormInput
-            classname="home-input-state"
-            type="state"
-            name="state"
-            values={values.state}
-            handleChange={handleChange}
-            placeholder="State"
-          />
-        </div>
+        <FormInput
+          type="location"
+          name="location"
+          value={location}
+          handleChange={handlePlanInput}
+          placeholder="location"
+        />
+
         <div className="home-select-group">
           <div className="form-row form-row-select">
             <select
               className="form-select"
               name="time"
               id="time"
-              values={values.time}
-              onChange={handleChange}
+              values={time}
+              onChange={handlePlanInput}
             >
               {timeOptions.map((itemValue, index) => {
                 return (
@@ -80,8 +61,8 @@ const Home = () => {
             <select
               name="duration"
               id="duration"
-              values={values.duration}
-              onChange={handleChange}
+              values={duration}
+              onChange={handlePlanInput}
               className="form-select"
             >
               {durationOptions.map((itemValue, index) => {
@@ -98,8 +79,9 @@ const Home = () => {
           Search
         </button>
       </form>
-
-      <CardItemsList />
+      <div className="home-list">
+        <CardItemsList />
+      </div>
     </div>
   );
 };

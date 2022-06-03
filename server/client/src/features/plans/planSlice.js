@@ -15,7 +15,7 @@ const initialState = {
   error_message: { origin: "", message: "" },
   isLoading: false,
   user: getUserFromLocalStorage(),
-  plans: {},
+  plans: [],
   currentPlan: {},
   currentPage: 0,
   timeOptions: ["week", "month", "year"],
@@ -27,21 +27,22 @@ const initialState = {
 
 export const getAllPlans = createAsyncThunk(
   "plan/getAllPlans",
-  async (user, thunkAPI) => {
-    const queries = "";
-    thunkAPI.getState().time
-      ? (queries += `&time=${thunkAPI.getState().time}`)
+  async (_, thunkAPI) => {
+    let queries = "";
+    thunkAPI.getState().plan.time
+      ? (queries += `&time=${thunkAPI.getState().plan.time}`)
       : (queries += "");
-    thunkAPI.getState().duration
-      ? (queries += `&duration=${thunkAPI.getState().duration}`)
+
+    thunkAPI.getState().plan.duration !== 0
+      ? (queries += `&duration=${thunkAPI.getState().plan.duration}`)
       : (queries += "");
-    thunkAPI.getState().location
-      ? (queries += `&location=${thunkAPI.getState().location}`)
+
+    thunkAPI.getState().plan.location
+      ? (queries += `&location=${thunkAPI.getState().plan.location}`)
       : (queries += "");
 
     return getAllPlansThunk(
-      `/plans?page=${thunkAPI.getState().currentPage}${queries}`,
-      user,
+      `/plans?page=${thunkAPI.getState().plan.currentPage}${queries}`,
       thunkAPI
     );
   }
@@ -90,14 +91,23 @@ export const deletePlan = createAsyncThunk(
 const planSlice = createSlice({
   name: "plan",
   initialState,
+  reducers: {
+    handleChange: (state, { payload: { name, value } }) => {
+      state[name] = value;
+    },
+    clearValues: () => {
+      return initialState;
+    },
+  },
   extraReducers: {
     // GET ALL PLANS
     [getAllPlans.pending]: (state) => {
       state.isLoading = true;
     },
     [getAllPlans.fulfilled]: (state, { payload }) => {
-      const { plans } = payload;
-      console.log("currentpLnas", plans);
+      const { data } = payload.data;
+      state.plans = data;
+
       state.isLoading = false;
       state.error_message = { origin: "", message: "" };
     },
@@ -113,8 +123,8 @@ const planSlice = createSlice({
       state.isLoading = true;
     },
     [getPlan.fulfilled]: (state, { payload }) => {
-      const { data } = payload;
-      state.plan = data;
+      const { data } = payload.data;
+      state.currentPlan = data;
       state.isLoading = false;
       state.error_message = "";
     },
@@ -128,4 +138,5 @@ const planSlice = createSlice({
   },
 });
 
+export const { handleChange, clearValues } = planSlice.actions;
 export default planSlice.reducer;

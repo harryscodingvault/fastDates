@@ -84,7 +84,30 @@ const getAllPlans = async (req, res) => {
     sDuration,
     sPage,
   });
-  res.json({ data });
+
+  const formattedPlans = await Promise.all(
+    data.data.map(async (plan) => {
+      try {
+        const destinations = await destinationsService.getDestinations(
+          plan.plan_id
+        );
+        const newFormat = {
+          plan_id: plan.plan_id,
+          plan_title: plan.plan_title,
+          plan_duration: plan.plan_duration,
+          plan_location: plan.plan_location,
+          plan_votes: plan.plan_votes,
+          destinations: destinations,
+        };
+        return newFormat;
+      } catch (err) {
+        return "Wll, cant do it";
+      }
+    })
+  );
+
+  console.log("formattedPlans", formattedPlans);
+  res.json({ data: formattedPlans });
 };
 
 const createPlan = async (req, res) => {
