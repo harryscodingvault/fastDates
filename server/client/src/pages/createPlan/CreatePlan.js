@@ -1,70 +1,88 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import FormInput from "../../components/formInput/FormInput";
 import "./CreatePlan.css";
+
+import { createPlan } from "../../features/plans/planSlice";
 
 const initialState = {
   title: "",
   duration: "",
   location: "",
-  destination_1: "",
-  destination_2: "",
-  destination_3: "",
-  destination_4: "",
-  destination_5: "",
 };
 
 const CreatePlan = () => {
   const [values, setValues] = useState(initialState);
-  const [nDestinations, setNDestinations] = useState(1);
+  const [destinations, setDestinations] = useState([{ name: "", address: "" }]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
+
     setValues({ ...values, [name]: value });
   };
 
   const onSubmit = (e) => {
-    const {
-      title,
-      duration,
-      location,
-      destination_1,
-      destination_2,
-      destination_3,
-      destination_4,
-      destination_5,
-    } = values;
-    const destinations = [
-      destination_1,
-      destination_2,
-      destination_3,
-      destination_4,
-      destination_5,
-    ];
-    const filteredD = destinations.filter((item) => {
-      return item !== "";
-    });
-    console.log("destinations", filteredD);
     e.preventDefault();
-    console.log({ title, location, duration, destinations: filteredD });
+    const { title, duration, location } = values;
+
+    const filteredD = destinations.filter((item) => {
+      return (
+        item.address !== "" &&
+        item.name !== "" &&
+        item.hasOwnProperty("address") &&
+        item.hasOwnProperty("name") &&
+        Object.keys(item).length !== 0
+      );
+    });
+    console.log("filteredD", filteredD);
+    if (
+      filteredD.length >= 1 &&
+      duration !== "" &&
+      title !== "" &&
+      location !== ""
+    ) {
+      const plan = { title, location, duration, destinations: filteredD };
+      //dispatch(createPlan(plan));
+      //console.log("plan", plan);
+      //navigate("/");
+    }
   };
 
-  const renderDestinationsInputs = () => {
-    let destinationsList = [];
-    for (let i = 1; i <= nDestinations; i++) {
-      destinationsList.push(
-        <FormInput
-          key={i}
-          type="text"
-          name={`destination_${i}`}
-          value={values[`destination_${i}`]}
-          handleChange={handleChange}
-          placeholder="Destination"
-        />
+  const renderDestinationsInputs = destinations.map((destination, index) => {
+    const arrayHandler = (e) => {
+      const name = e.target.name;
+      const value = e.target.value;
+      setDestinations((currentD) =>
+        currentD.map((x, i) => {
+          return i === index ? { ...x, [name]: value } : x;
+        })
       );
-    }
-    return destinationsList;
-  };
+    };
+
+    return (
+      <div className="destination-input-group" key={index}>
+        <h5>Destination {index + 1}</h5>
+        <FormInput
+          type="text"
+          name="name"
+          value={destination.name}
+          handleChange={(e) => arrayHandler(e)}
+          placeholder="Destination Name"
+        />
+        <FormInput
+          type="text"
+          name="address"
+          value={destination.address}
+          handleChange={(e) => arrayHandler(e)}
+          placeholder="Destination Address"
+        />
+      </div>
+    );
+  });
 
   return (
     <div className="create-plan-container">
@@ -93,13 +111,13 @@ const CreatePlan = () => {
           placeholder="Location"
         />
         <div className="create-plan-destinations-group">
-          {renderDestinationsInputs()}
+          {renderDestinationsInputs}
         </div>
 
-        {nDestinations !== 5 && (
+        {destinations.length !== 5 && (
           <div
             className="btn-add"
-            onClick={() => setNDestinations(nDestinations + 1)}
+            onClick={() => setDestinations([...destinations, {}])}
           >
             <h2>+</h2>
           </div>
