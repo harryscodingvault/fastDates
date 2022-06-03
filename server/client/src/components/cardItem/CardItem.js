@@ -27,12 +27,13 @@ const CardItem = ({ data }) => {
   return (
     <div className="cardItem-container">
       <div className="cardItem-voting--btn-group">
-        <button className="btn">
+        <div className="vote-btn">
           <ArrowUpwardIcon />
-        </button>
-        <button className="btn">
-          <ArrowDownwardIcon /> {plan_votes}
-        </button>
+        </div>
+        <h5>{plan_votes}</h5>
+        <div className="vote-btn">
+          <ArrowDownwardIcon />
+        </div>
       </div>
       <div className="cardItem-text-group">
         <p>Creator: {user_id}</p>

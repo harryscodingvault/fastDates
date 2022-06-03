@@ -19,19 +19,32 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    align-items: flex-end;
+    align-items: center;
     width: 20%;
     height: 12rem;
 }
-.cardItem-voting--btn-group .btn{
-    width: 3rem;
-    height: 5rem;
+
+.vote-btn{
+    width: 2rem;
+    height: 4rem;
     margin: 0 0.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color: var(--primary-500);
+    cursor: pointer;
 }
+
+.vote-btn:hover{
+    background-color: var(--blue-light);
+}
+.vote-btn:active{
+    background-color: var(--blue-dark);
+}
+
+
+
 .cardItem-destinations-container{
     width: 100vw;
     padding: 0 1rem;
