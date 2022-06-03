@@ -8,7 +8,7 @@ import { createPlan } from "../../features/plans/planSlice";
 
 const initialState = {
   title: "",
-  duration: "",
+  duration: 1,
   location: "",
 };
 
@@ -17,9 +17,8 @@ const CreatePlan = () => {
   const [destinations, setDestinations] = useState([
     { name: "", address: "", type: "" },
   ]);
-  const { error_message, isLoading, currentPlan } = useSelector(
-    (store) => store.plan
-  );
+  const { error_message, isLoading, currentPlan, durationOptions } =
+    useSelector((store) => store.plan);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -53,6 +52,8 @@ const CreatePlan = () => {
       location !== ""
     ) {
       const plan = { title, location, duration, destinations: filteredD };
+      console.log("plan", plan);
+      console.log("duration", duration);
       dispatch(createPlan({ data: plan }));
 
       if (!error_message.message && currentPlan) {
@@ -112,13 +113,23 @@ const CreatePlan = () => {
           handleChange={handleChange}
           placeholder="Title"
         />
-        <FormInput
-          type="number"
-          name="duration"
-          value={values.duration}
-          handleChange={handleChange}
-          placeholder="Duration"
-        />
+        <div className="form-row form-row-select">
+          <select
+            name="duration"
+            id="duration"
+            values={values.duration}
+            onChange={handleChange}
+            className="form-select"
+          >
+            {durationOptions.map((itemValue, index) => {
+              return (
+                <option key={index} value={itemValue}>
+                  {itemValue}
+                </option>
+              );
+            })}
+          </select>
+        </div>
 
         <FormInput
           type="text"
