@@ -139,7 +139,7 @@ ul{
     padding-bottom: 0.5rem;
     width: 95%;
 }
-.form-input, .form-textarea {
+.form-input, .form-textarea, .form-select {
     width: 100%;
     height: 40px;
     line-height: 28px;
@@ -160,12 +160,12 @@ ul{
 }
 
    
-.form-input::placeholder {
+.form-input::placeholder,.form-select {
     color: var(--primary-500);
     font-size: 1rem;
 }
    
-.form-input:focus, .form-input:hover, .form-textarea:focus, .form-textarea:hover {
+.form-input:focus, .form-input:hover, .form-textarea:focus, .form-textarea:hover, .form-select:focus, .form-select:hover {
     outline: none;
     background-color: var(--grey-900);
     box-shadow: 0 0 0 3px var(--primary-500);

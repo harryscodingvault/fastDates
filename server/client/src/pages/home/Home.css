@@ -14,3 +14,37 @@
     margin: 0;
     padding: 0;
 }
+
+.home-search-form{
+    background-color: var(--grey-900);
+    border: 0;
+    width: 100%;
+}
+
+.home-select-group{
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+}
+.home-search-form .form-row-select{
+    width: 45%;
+}
+
+.home-input-group{
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+
+.home-input-group .home-input-city{
+    width:65%;
+    
+}
+.home-input-group .home-input-state{
+    width: 30%;
+    
+ }
+

@@ -13,13 +13,13 @@ const listPlans = ({ sLocation, fromT, sDuration, sPage }) => {
         .whereBetween("plan_duration", [sDuration[0], sDuration[1]])
         //.whereBetween("created_at", [fromT, currentTime])
         .orderBy("plan_upvotes", "asc")
-        .paginate({ perPage: 20, currentPage: sPage })
+        .paginate({ perPage: 10, currentPage: sPage })
     );
   }
   return knex("plans")
     .select("*")
     .orderBy("plan_upvotes", "asc")
-    .paginate({ perPage: 20, currentPage: sPage });
+    .paginate({ perPage: 10, currentPage: sPage });
 };
 
 const getPlan = (planId) => {

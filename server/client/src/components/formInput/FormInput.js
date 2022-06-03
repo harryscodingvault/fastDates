@@ -1,8 +1,15 @@
 import React from "react";
 
-const FormInput = ({ type, name, values, handleChange, placeholder }) => {
+const FormInput = ({
+  classname,
+  type,
+  name,
+  values,
+  handleChange,
+  placeholder,
+}) => {
   return (
-    <div className="form-row">
+    <div className={`form-row ${classname}`}>
       <input
         type={type}
         name={name}

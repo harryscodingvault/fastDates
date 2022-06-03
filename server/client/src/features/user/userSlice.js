@@ -6,6 +6,12 @@ import {
   removeUserFromLocalStorage,
 } from "../../utils/localStorage";
 
+import {
+  registerUserThunk,
+  loginUserThunk,
+  updateUserThunk,
+} from "./userThunk";
+
 const initialState = {
   error_message: { origin: "", message: "" },
   isLoading: false,
@@ -15,46 +21,25 @@ const initialState = {
 export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (user, thunkAPI) => {
-    try {
-      const res = await originFetch.post("/auth/register", user);
-      return res.data;
-    } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data.message);
-    }
+    return registerUserThunk("/auth/register", user, thunkAPI);
   }
 );
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (user, thunkAPI) => {
-    try {
-      const res = await originFetch.post("/auth/login", user);
-
-      return res.data;
-    } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data.message);
-    }
+    return loginUserThunk("/auth/login", user, thunkAPI);
   }
 );
 
 export const updateUser = createAsyncThunk(
   "user/updateUser",
   async (user, thunkAPI) => {
-    try {
-      const res = await originFetch.patch(
-        `/users/${thunkAPI.getState().user.user.user.id}`,
-        user,
-        {
-          headers: {
-            authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
-          },
-        }
-      );
-
-      return res.data;
-    } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data.message);
-    }
+    return updateUserThunk(
+      `/users/${thunkAPI.getState().user.user.user.id}`,
+      user,
+      thunkAPI
+    );
   }
 );
 
@@ -68,6 +53,7 @@ const userSlice = createSlice({
     },
   },
   extraReducers: {
+    // REGISTER USER
     [registerUser.pending]: (state) => {
       state.isLoading = true;
     },
@@ -82,6 +68,7 @@ const userSlice = createSlice({
         message: payload || "Fill all fields",
       };
     },
+    // LOGIN USER
     [loginUser.pending]: (state) => {
       state.isLoading = true;
     },
@@ -99,7 +86,7 @@ const userSlice = createSlice({
         message: payload || "Fill all fields",
       };
     },
-
+    // UPDATE USER
     [updateUser.pending]: (state) => {
       state.isLoading = true;
     },
