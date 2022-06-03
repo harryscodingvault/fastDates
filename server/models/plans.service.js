@@ -12,14 +12,14 @@ const listPlans = ({ sLocation, fromT, sDuration, sPage }) => {
         .where({ plan_location: sLocation })
         .whereBetween("plan_duration", [sDuration[0], sDuration[1]])
         //.whereBetween("created_at", [fromT, currentTime])
-        .orderBy("plan_upvotes", "asc")
+        .orderBy("plan_votes", "asc")
         .groupBy("p.plan_id")
         .paginate({ perPage: 10, currentPage: sPage })
     );
   }
   return knex("plans")
     .select("*")
-    .orderBy("plan_upvotes", "asc")
+    .orderBy("plan_votes", "asc")
     .paginate({ perPage: 10, currentPage: sPage });
 };
 

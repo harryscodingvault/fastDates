@@ -28,12 +28,12 @@ const getVotesCount = async (req, res) => {
     upvote: false,
     downvote: true,
   });
+  const totalVotes = votesUp.count - votesDown.count;
 
   return res.json({
     data: {
       vote: {
-        vote_up_count: votesUp.count,
-        vote_down_count: votesDown.count,
+        vote_count: totalVotes,
       },
     },
   });

@@ -8,8 +8,7 @@ exports.seed = async function (knex) {
       plan_duration: 4,
       plan_location: "phoenix, az",
       plan_travel_time: "10",
-      plan_upvotes: 30,
-      plan_downvotes: 20,
+      plan_votes: 30,
       user_id: 1,
     },
     {
@@ -18,8 +17,7 @@ exports.seed = async function (knex) {
       plan_duration: 1,
       plan_location: "phoenix, az",
       plan_travel_time: "10",
-      plan_upvotes: 20,
-      plan_downvotes: 40,
+      plan_votes: 20,
       user_id: 2,
     },
     {
@@ -28,8 +26,7 @@ exports.seed = async function (knex) {
       plan_duration: 4,
       plan_location: "phoenix, az",
       plan_travel_time: "10",
-      plan_upvotes: 60,
-      plan_downvotes: 10,
+      plan_votes: 60,
       user_id: 3,
     },
   ]);

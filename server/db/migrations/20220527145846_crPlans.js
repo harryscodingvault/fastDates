@@ -5,8 +5,7 @@ exports.up = function (knex) {
     table.integer("plan_duration");
     table.string("plan_location");
     table.string("plan_travel_time");
-    table.integer("plan_upvotes");
-    table.integer("plan_downvotes");
+    table.integer("plan_votes");
     table.integer("user_id").unsigned().notNullable();
     table
       .foreign("user_id")

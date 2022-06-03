@@ -1,7 +1,7 @@
 const plansService = require("../models/plans.service");
 const usersService = require("../models/users.service");
 const destinationsService = require("../models/destinations.service");
-const votesService = require("../models/votes.service");
+
 const asyncErrorBoundary = require("../middleware/asyncErrorBoundary");
 const moment = require("moment");
 
@@ -48,8 +48,7 @@ const getPlan = async (req, res) => {
         location: plan.plan_location,
         duration: plan.plan_duration,
         travel_time: plan.plan_travel_time,
-        upvotes: plan.plan_upvotes,
-        downvotes: plan.plan_downvotes,
+        votes: plan.plan_votes,
         destinations: destinations.map((destination) => {
           return {
             type: destination.destination_type,
@@ -106,8 +105,7 @@ const getAllPlans = async (req, res) => {
     })
   );
 
-  console.log("formattedPlans", formattedPlans);
-  res.json({ data: formattedPlans });
+  res.json({ data: { plans: formattedPlans, paginate: data.pagination } });
 };
 
 const createPlan = async (req, res) => {

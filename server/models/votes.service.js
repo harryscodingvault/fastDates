@@ -30,14 +30,11 @@ const updateVoteCount = async (planId) => {
     .count()
     .where({ plan_id: planId, vote_down: true })
     .first();
-  console.log("updateVoteCount", upvoteCount, downvoteCount);
+  const totalVotes = upvoteCount.count - downvoteCount.count;
   return knex("plans")
     .select("*")
     .where({ plan_id: planId })
-    .update(
-      { plan_upvotes: upvoteCount.count, plan_downvotes: downvoteCount.count },
-      "*"
-    );
+    .update({ plan_votes: totalVotes.count }, "*");
 };
 
 const getVoteCount = (planId, { upvote, downvote }) => {
