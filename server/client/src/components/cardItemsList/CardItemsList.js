@@ -11,7 +11,6 @@ const CardItemsList = () => {
     (store) => store.plan
   );
   const dispatch = useDispatch();
-  console.log(plans);
 
   useEffect(() => {
     dispatch(getAllPlans());

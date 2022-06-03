@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import CardItemsList from "../../components/cardItemsList/CardItemsList";
 import "./Home.css";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import { handleChange } from "../../features/plans/planSlice";
 
@@ -12,6 +13,7 @@ const Home = () => {
   const { timeOptions, durationOptions, time, duration, location } =
     useSelector((store) => store.plan);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handlePlanInput = (e) => {
     const name = e.target.name;
@@ -26,7 +28,10 @@ const Home = () => {
   return (
     <div className="home-container">
       {user && (
-        <button className="btn home-btn">
+        <button
+          className="btn home-btn"
+          onClick={() => navigate("/createplan")}
+        >
           <h5>New Plan?</h5>
         </button>
       )}

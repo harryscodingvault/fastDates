@@ -55,21 +55,17 @@ export const getPlan = createAsyncThunk(
   }
 );
 
+export const createPlan = createAsyncThunk(
+  "plan/createPlan",
+  async (plan, thunkAPI) => {
+    return createPlanThunk(`/plans/`, plan, thunkAPI);
+  }
+);
+
 export const editPlan = createAsyncThunk(
   "plan/editPlan",
   async (user, thunkAPI) => {
     return editPlanThunk(
-      `/users/${thunkAPI.getState().user.user.user.id}`,
-      user,
-      thunkAPI
-    );
-  }
-);
-
-export const createPlan = createAsyncThunk(
-  "plan/createPlan",
-  async (user, thunkAPI) => {
-    return createPlanThunk(
       `/users/${thunkAPI.getState().user.user.user.id}`,
       user,
       thunkAPI
@@ -129,6 +125,21 @@ const planSlice = createSlice({
       state.error_message = "";
     },
     [getPlan.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+      state.error_message = {
+        origin: "getPlan",
+        message: payload || "Cant get plan :(",
+      };
+    },
+    // CREATE PLAN
+    [createPlan.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [createPlan.fulfilled]: (state) => {
+      state.isLoading = false;
+      state.error_message = "";
+    },
+    [createPlan.rejected]: (state, { payload }) => {
       state.isLoading = false;
       state.error_message = {
         origin: "getPlan",
