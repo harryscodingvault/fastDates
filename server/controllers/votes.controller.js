@@ -45,8 +45,6 @@ const votePlan = async (req, res) => {
   const vote = await votesService.getVote(plan.plan_id, plan.user_id);
   let newVote = req.body.data;
 
-  console.log("thisVote", req.body);
-
   if (vote) {
     const updatedVote = {
       vote_id: vote.vote_id,

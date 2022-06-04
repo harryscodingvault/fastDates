@@ -1,6 +1,7 @@
 const plansService = require("../models/plans.service");
 const usersService = require("../models/users.service");
 const destinationsService = require("../models/destinations.service");
+const votesService = require("../models/votes.service");
 
 const asyncErrorBoundary = require("../middleware/asyncErrorBoundary");
 const moment = require("moment");
@@ -63,7 +64,7 @@ const getPlan = async (req, res) => {
 };
 
 const getAllPlans = async (req, res) => {
-  const { location, duration, time, page } = req.query;
+  const { location, duration, time, page, user: userId } = req.query;
 
   const sPage = page;
   const sLocation = location?.split("-").join(", ") || "n";
@@ -88,9 +89,16 @@ const getAllPlans = async (req, res) => {
   const formattedPlans = await Promise.all(
     data.data.map(async (plan) => {
       try {
+        let user_vote = { vote_up: null, vote_down: null };
+        try {
+          const vote = await votesService.getVote(plan.plan_id, userId);
+          user_vote = vote;
+        } catch (err) {}
+
         const destinations = await destinationsService.getDestinations(
           plan.plan_id
         );
+
         const newFormat = {
           user_username: plan.user_username,
           user_id: plan.user_id,
@@ -99,11 +107,13 @@ const getAllPlans = async (req, res) => {
           plan_duration: plan.plan_duration,
           plan_location: plan.plan_location,
           plan_votes: plan.plan_votes,
+          user_vote: user_vote,
           destinations: destinations,
         };
+
         return newFormat;
       } catch (err) {
-        return "Wll, cant do it";
+        return {};
       }
     })
   );

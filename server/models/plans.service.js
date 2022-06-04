@@ -6,17 +6,18 @@ const listPlans = ({ sLocation, fromT, sDuration, sPage }) => {
   console.log({ currentTime, fromT });
   if (sLocation !== "n") {
     return (
-      knex("plans")
+      knex("plans as p")
         .join("users as u", "p.user_id", "u.user_id")
         .select("*")
         .where({ plan_location: sLocation })
         .whereBetween("plan_duration", [sDuration[0], sDuration[1]])
         //.whereBetween("created_at", [fromT, currentTime])
-        .orderBy("plan_votes", "asc")
-        .groupBy("p.plan_id")
+        .orderBy("plan_votes", "desc")
+
         .paginate({ perPage: 10, currentPage: sPage })
     );
   }
+
   return knex("plans as p")
     .join("users as u", "p.user_id", "u.user_id")
     .select("*")

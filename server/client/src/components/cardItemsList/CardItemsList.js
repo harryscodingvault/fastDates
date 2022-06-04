@@ -18,9 +18,12 @@ const CardItemsList = () => {
     dispatch(refreshPlansList());
   }, [refresh_plans]);
 
-  const listPlans = plans?.map((plan) => (
-    <CardItem data={plan} key={plan.plan_id} />
-  ));
+  const listPlans = plans?.map((plan, index) => {
+    if (Object.keys(plan).length !== 0 && plan !== undefined) {
+      return <CardItem data={plan} key={index} />;
+    }
+  });
+
   if (!plans.length) {
     return (
       <div className="cardItemsList-container">

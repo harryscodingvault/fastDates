@@ -7,7 +7,6 @@ import {
   deletePlan,
   setCurrentPlan,
   votePlan,
-  updateVotingCount,
 } from "../../features/plans/planSlice";
 import { useNavigate } from "react-router-dom";
 
@@ -20,21 +19,27 @@ const CardItem = ({ data }) => {
     plan_votes,
     plan_location,
     destinations,
+    user_vote,
   } = data;
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [upVote, setUpVote] = useState(false);
   const [downVote, setDownVote] = useState(false);
+  const [voteClicked, setVoteClicked] = useState(false);
+
+  console.log(user_vote);
 
   useEffect(() => {
     const vote = {
       vote_up: upVote,
       vote_down: downVote,
     };
-
-    dispatch(setCurrentPlan(data));
-    dispatch(updateVotingCount(vote));
-    dispatch(votePlan({ data: vote }));
+    if (vote && data.plan_id !== undefined && voteClicked) {
+      setVoteClicked(false);
+      dispatch(setCurrentPlan(data));
+      dispatch(votePlan({ data: vote }));
+    }
   }, [upVote, downVote]);
 
   const mapDestinations = destinations?.map((destination) => (
@@ -59,8 +64,13 @@ const CardItem = ({ data }) => {
     <div className="cardItem-container">
       <div className="cardItem-voting--btn-group">
         <div
-          className={`vote-btn ${upVote && !downVote && "vote-on"}`}
+          className={`vote-btn ${
+            ((user_vote?.vote_up && !user_vote?.vote_down) ||
+              (upVote && !downVote)) &&
+            "vote-on"
+          }`}
           onClick={() => {
+            setVoteClicked(true);
             setDownVote(false);
             setUpVote(!upVote);
           }}
@@ -69,8 +79,13 @@ const CardItem = ({ data }) => {
         </div>
         <h5>{plan_votes ? plan_votes : 0}</h5>
         <div
-          className={`vote-btn  ${downVote && !upVote && "vote-on"}`}
+          className={`vote-btn  ${
+            ((!user_vote?.vote_up && user_vote?.vote_down) ||
+              (downVote && !upVote)) &&
+            "vote-on"
+          }`}
           onClick={() => {
+            setVoteClicked(true);
             setDownVote(!downVote);
             setUpVote(false);
           }}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import CardItemsList from "../../components/cardItemsList/CardItemsList";
 import "./Home.css";
 import { useSelector, useDispatch } from "react-redux";

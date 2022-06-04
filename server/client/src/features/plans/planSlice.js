@@ -37,21 +37,24 @@ const messageReset = (alert) => {
 export const getAllPlans = createAsyncThunk(
   "plan/getAllPlans",
   async (_, thunkAPI) => {
+    console.log();
     let queries = "";
+    thunkAPI.getState().user.user.user.id
+      ? (queries += `&user=${thunkAPI.getState().user.user.user.id}`)
+      : (queries += "");
     thunkAPI.getState().plan.time
       ? (queries += `&time=${thunkAPI.getState().plan.time}`)
       : (queries += "");
-
     thunkAPI.getState().plan.duration !== 0
       ? (queries += `&duration=${thunkAPI.getState().plan.duration}`)
       : (queries += "");
-
     thunkAPI.getState().plan.location
       ? (queries += `&location=${thunkAPI.getState().plan.location}`)
       : (queries += "");
 
     return getAllPlansThunk(
       `/plans?page=${thunkAPI.getState().plan.currentPage}${queries}`,
+
       thunkAPI
     );
   }
@@ -116,25 +119,6 @@ const planSlice = createSlice({
     setCurrentPlan: (state, { payload }) => {
       state.currentPlan = payload;
     },
-    updateVotingCount: (state, { payload }) => {
-      const { vote_up, vote_down } = payload;
-      let count = 0;
-      if (vote_up && vote_down) count = 0;
-      if (!vote_up && vote_down) count = -1;
-      if (vote_up && !vote_down) count = 1;
-      state.currentPlan.plan_votes += count;
-
-      const updatedPlans = state.plans.map((plan) => {
-        if (plan.plan_id === state.currentPlan.plan_id) {
-          return {
-            ...plan,
-            plan_votes: state.currentPlan.plan_votes,
-          };
-        }
-        return plan;
-      });
-      state.plans = updatedPlans;
-    },
   },
   extraReducers: {
     // GET ALL PLANS
@@ -143,6 +127,7 @@ const planSlice = createSlice({
     },
     [getAllPlans.fulfilled]: (state, { payload }) => {
       const { plans, paginate } = payload.data;
+
       state.plans = plans;
       state.currentPage = paginate.currentPage;
       state.isLoading = false;
@@ -251,6 +236,7 @@ const planSlice = createSlice({
     [votePlan.fulfilled]: (state, { payload }) => {
       state.isLoading = false;
       const { total_votes } = payload.data.vote;
+
       const updatedPlans = state.plans.map((plan) => {
         if (plan.plan_id === payload.data.vote.plan_id) {
           return {
@@ -279,11 +265,6 @@ const planSlice = createSlice({
   },
 });
 
-export const {
-  updateVotingCount,
-  handleChange,
-  clearValues,
-  refreshPlansList,
-  setCurrentPlan,
-} = planSlice.actions;
+export const { handleChange, clearValues, refreshPlansList, setCurrentPlan } =
+  planSlice.actions;
 export default planSlice.reducer;
