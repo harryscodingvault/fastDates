@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import originFetch from "../../utils/axios";
 
 import { getUserFromLocalStorage } from "../../utils/localStorage";
@@ -91,8 +91,12 @@ export const deletePlan = createAsyncThunk(
 
 export const votePlan = createAsyncThunk(
   "plan/deletePlan",
-  async (plan_id, thunkAPI) => {
-    return votePlanThunk(`/plans/${plan_id}/vote`, thunkAPI);
+  async (vote, thunkAPI) => {
+    return votePlanThunk(
+      `/plans/${thunkAPI.getState().plan.currentPlan.plan_id}/vote`,
+      vote,
+      thunkAPI
+    );
   }
 );
 
@@ -109,8 +113,11 @@ const planSlice = createSlice({
     refreshPlansList: (state) => {
       state.refresh_plans = false;
     },
-    setCurrentPlan: (state, plan) => {
-      state.currentPlan = plan.payload;
+    setCurrentPlan: (state, { payload }) => {
+      state.currentPlan = payload;
+    },
+    updateVotingCount: (state, { payload }) => {
+      //console.log(current(state.plans));
     },
   },
   extraReducers: {
@@ -227,8 +234,18 @@ const planSlice = createSlice({
     },
     [votePlan.fulfilled]: (state, { payload }) => {
       state.isLoading = false;
-      const { voteCount } = payload.data.vote;
-      state.currentPlan.voteCount = voteCount;
+      const { total_votes } = payload.data.vote;
+      const updatedPlans = state.plans.map((plan) => {
+        if (plan.plan_id === payload.data.vote.plan_id) {
+          return { ...plan, plan_votes: total_votes };
+        }
+        return plan;
+      });
+      console.log("voteCount", payload.data.vote.plan_id);
+      //console.log("updated Plnas", current(updatedPlans));
+      //console.log("updated Plnas", current(state.currentPlan));
+      state.currentPlan.voteCount = total_votes;
+      state.plans = updatedPlans;
       state.success_message = {
         origin: "votePlan",
         message: "Plan Updated!",
@@ -245,6 +262,11 @@ const planSlice = createSlice({
   },
 });
 
-export const { handleChange, clearValues, refreshPlansList, setCurrentPlan } =
-  planSlice.actions;
+export const {
+  updateVotingCount,
+  handleChange,
+  clearValues,
+  refreshPlansList,
+  setCurrentPlan,
+} = planSlice.actions;
 export default planSlice.reducer;

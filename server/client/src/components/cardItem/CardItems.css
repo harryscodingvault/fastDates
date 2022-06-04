@@ -42,6 +42,9 @@
 .vote-btn:active{
     background-color: var(--blue-dark);
 }
+.vote-on{
+    background-color: var(--primary-300)
+}
 
 
 
