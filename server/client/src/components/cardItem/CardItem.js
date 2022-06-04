@@ -2,7 +2,8 @@ import React from "react";
 import "./CardItems.css";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { deletePlan } from "../../features/plans/planSlice";
 
 const CardItem = ({ data }) => {
   const { user } = useSelector((store) => store.user);
@@ -14,6 +15,7 @@ const CardItem = ({ data }) => {
     plan_location,
     destinations,
   } = data;
+  const dispatch = useDispatch();
 
   const mapDestinations = destinations.map((destination) => (
     <li key={destination.destination_id}>
@@ -23,6 +25,10 @@ const CardItem = ({ data }) => {
       <h5>{destination.destination_name}</h5>
     </li>
   ));
+
+  const deleteHandler = () => {
+    dispatch(deletePlan(data.plan_id));
+  };
 
   return (
     <div className="cardItem-container">
@@ -48,10 +54,13 @@ const CardItem = ({ data }) => {
       <div className="cardItem-destinations-container">
         <ul className="cardItem-destinations-list">{mapDestinations}</ul>
       </div>
-      {user && (
+
+      {user.user.id === data.user_id && (
         <div className="cardItem-edit-btn-group">
           <button className="btn">Edit</button>
-          <button className="btn">Delete</button>
+          <button className="btn" onClick={() => deleteHandler()}>
+            Delete
+          </button>
         </div>
       )}
     </div>

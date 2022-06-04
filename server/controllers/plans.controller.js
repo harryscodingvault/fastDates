@@ -91,6 +91,7 @@ const getAllPlans = async (req, res) => {
           plan.plan_id
         );
         const newFormat = {
+          user_id: plan.user_id,
           plan_id: plan.plan_id,
           plan_title: plan.plan_title,
           plan_duration: plan.plan_duration,
@@ -191,6 +192,7 @@ const editPlan = async (req, res) => {
 
 const deletePlan = async (req, res) => {
   const plan = res.locals.plan;
+
   if (req.user.userId === plan.user_id) {
     await plansService.deletePlan(plan.plan_id);
     return res.send("Plan deleted!");

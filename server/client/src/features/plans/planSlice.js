@@ -13,16 +13,24 @@ import {
 
 const initialState = {
   error_message: { origin: "", message: "" },
+  success_message: { origin: "", message: "" },
   isLoading: false,
   user: getUserFromLocalStorage(),
   plans: [],
   currentPlan: {},
-  currentPage: 0,
+  currentPage: 1,
   timeOptions: ["week", "month", "year"],
   time: "",
   durationOptions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   duration: 0,
   location: "",
+  refresh_plans: false,
+};
+
+const messageReset = (alert) => {
+  alert.origin = "";
+  alert.message = "";
+  return setTimeout(2000);
 };
 
 export const getAllPlans = createAsyncThunk(
@@ -75,12 +83,9 @@ export const editPlan = createAsyncThunk(
 
 export const deletePlan = createAsyncThunk(
   "plan/deletePlan",
-  async (user, thunkAPI) => {
-    return deletePlanThunk(
-      `/users/${thunkAPI.getState().user.user.user.id}`,
-      user,
-      thunkAPI
-    );
+  async (plan_id, thunkAPI) => {
+    console.log(plan_id, `/plans/${plan_id}`);
+    return deletePlanThunk(`/plans/${plan_id}`, thunkAPI);
   }
 );
 
@@ -93,6 +98,9 @@ const planSlice = createSlice({
     },
     clearValues: () => {
       return initialState;
+    },
+    refreshPlansList: (state) => {
+      state.refresh_plans = false;
     },
   },
   extraReducers: {
@@ -148,8 +156,34 @@ const planSlice = createSlice({
         message: payload || "Cant create plan :(",
       };
     },
+    // DELETE PLAN
+    [deletePlan.pending]: (state) => {
+      state.isLoading = true;
+      state.success_message = {
+        origin: "",
+        message: "",
+      };
+    },
+    [deletePlan.fulfilled]: (state) => {
+      state.isLoading = false;
+      console.log("Plan deleted!");
+      state.success_message = {
+        origin: "deletePlan",
+        message: "Plan deleted!",
+      };
+      state.refresh_plans = true;
+      messageReset(state.success_message);
+    },
+    [deletePlan.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+      state.error_message = {
+        origin: "deletePlan",
+        message: payload || "Cant delete plan :(",
+      };
+    },
   },
 });
 
-export const { handleChange, clearValues } = planSlice.actions;
+export const { handleChange, clearValues, refreshPlansList } =
+  planSlice.actions;
 export default planSlice.reducer;

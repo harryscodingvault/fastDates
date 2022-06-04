@@ -3,18 +3,20 @@ import "./CardItemsList.css";
 import { useDispatch, useSelector } from "react-redux";
 
 import CardItem from "../cardItem/CardItem";
-import { travels } from "../../data/data";
+
 import { getAllPlans } from "../../features//plans/planSlice";
+import { refreshPlansList } from "../../features/plans/planSlice";
 
 const CardItemsList = () => {
-  const { isLoading, error_message, plans } = useSelector(
+  const { plans, success_message, refresh_plans } = useSelector(
     (store) => store.plan
   );
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllPlans());
-  }, []);
+    dispatch(refreshPlansList());
+  }, [refresh_plans]);
 
   const listPlans = plans?.map((plan) => (
     <CardItem data={plan} key={plan.plan_id} />
@@ -28,7 +30,12 @@ const CardItemsList = () => {
   }
 
   return plans ? (
-    <div className="cardItemsList-container">{listPlans}</div>
+    <div className="cardItemsList-container">
+      {success_message.origin === "deletePlan" && (
+        <div className="alert alert-success">{success_message.message}</div>
+      )}
+      {listPlans}
+    </div>
   ) : (
     <div className="cardItemsList-container">
       <div className="spinner"></div>

@@ -44,9 +44,10 @@ export const editPlanThunk = async (url, plan, thunkAPI) => {
   }
 };
 
-export const deletePlanThunk = async (url, plan, thunkAPI) => {
+export const deletePlanThunk = async (url, thunkAPI) => {
+  console.log("deletePlanThunk", url);
   try {
-    const res = await originFetch.delete(url, plan, {
+    const res = await originFetch.delete(url, {
       headers: {
         authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
       },
