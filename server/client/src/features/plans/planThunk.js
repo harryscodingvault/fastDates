@@ -45,9 +45,22 @@ export const editPlanThunk = async (url, plan, thunkAPI) => {
 };
 
 export const deletePlanThunk = async (url, thunkAPI) => {
-  console.log("deletePlanThunk", url);
   try {
     const res = await originFetch.delete(url, {
+      headers: {
+        authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
+      },
+    });
+
+    return res.data;
+  } catch (err) {
+    return thunkAPI.rejectWithValue(err.response.data.message);
+  }
+};
+
+export const votePlanThunk = async (url, vote, thunkAPI) => {
+  try {
+    const res = await originFetch.post(url, vote, {
       headers: {
         authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
       },

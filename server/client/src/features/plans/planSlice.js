@@ -9,6 +9,7 @@ import {
   createPlanThunk,
   editPlanThunk,
   deletePlanThunk,
+  votePlanThunk,
 } from "./planThunk";
 
 const initialState = {
@@ -85,6 +86,13 @@ export const deletePlan = createAsyncThunk(
   "plan/deletePlan",
   async (plan_id, thunkAPI) => {
     return deletePlanThunk(`/plans/${plan_id}`, thunkAPI);
+  }
+);
+
+export const votePlan = createAsyncThunk(
+  "plan/deletePlan",
+  async (plan_id, thunkAPI) => {
+    return votePlanThunk(`/plans/${plan_id}/vote`, thunkAPI);
   }
 );
 
@@ -203,11 +211,35 @@ const planSlice = createSlice({
       messageReset(state.success_message);
     },
     [editPlan.rejected]: (state, { payload }) => {
-      console.log("update failed");
       state.isLoading = false;
       state.error_message = {
         origin: "editPlan",
         message: payload || "Cant edit plan :(",
+      };
+    },
+    // VOTE PLAN
+    [votePlan.pending]: (state) => {
+      state.isLoading = true;
+      state.success_message = {
+        origin: "",
+        message: "",
+      };
+    },
+    [votePlan.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+      const { voteCount } = payload.data.vote;
+      state.currentPlan.voteCount = voteCount;
+      state.success_message = {
+        origin: "votePlan",
+        message: "Plan Updated!",
+      };
+      messageReset(state.success_message);
+    },
+    [votePlan.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+      state.error_message = {
+        origin: "votePlan",
+        message: payload || "Cant vote for plan :(",
       };
     },
   },
