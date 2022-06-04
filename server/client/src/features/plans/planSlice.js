@@ -117,7 +117,23 @@ const planSlice = createSlice({
       state.currentPlan = payload;
     },
     updateVotingCount: (state, { payload }) => {
-      //console.log(current(state.plans));
+      const { vote_up, vote_down } = payload;
+      let count = 0;
+      if (vote_up && vote_down) count = 0;
+      if (!vote_up && vote_down) count = -1;
+      if (vote_up && !vote_down) count = 1;
+      state.currentPlan.plan_votes += count;
+
+      const updatedPlans = state.plans.map((plan) => {
+        if (plan.plan_id === state.currentPlan.plan_id) {
+          return {
+            ...plan,
+            plan_votes: state.currentPlan.plan_votes,
+          };
+        }
+        return plan;
+      });
+      state.plans = updatedPlans;
     },
   },
   extraReducers: {
@@ -237,13 +253,14 @@ const planSlice = createSlice({
       const { total_votes } = payload.data.vote;
       const updatedPlans = state.plans.map((plan) => {
         if (plan.plan_id === payload.data.vote.plan_id) {
-          return { ...plan, plan_votes: total_votes };
+          return {
+            ...plan,
+            plan_votes: total_votes,
+          };
         }
         return plan;
       });
-      console.log("voteCount", payload.data.vote.plan_id);
-      //console.log("updated Plnas", current(updatedPlans));
-      //console.log("updated Plnas", current(state.currentPlan));
+
       state.currentPlan.voteCount = total_votes;
       state.plans = updatedPlans;
       state.success_message = {

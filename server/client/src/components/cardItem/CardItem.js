@@ -26,6 +26,17 @@ const CardItem = ({ data }) => {
   const [upVote, setUpVote] = useState(false);
   const [downVote, setDownVote] = useState(false);
 
+  useEffect(() => {
+    const vote = {
+      vote_up: upVote,
+      vote_down: downVote,
+    };
+
+    dispatch(setCurrentPlan(data));
+    dispatch(updateVotingCount(vote));
+    dispatch(votePlan({ data: vote }));
+  }, [upVote, downVote]);
+
   const mapDestinations = destinations?.map((destination) => (
     <li key={destination.destination_id}>
       <p>
@@ -44,44 +55,25 @@ const CardItem = ({ data }) => {
     navigate(`plan/${data.plan_id}/edit`);
   };
 
-  const votingHandler = (type) => {
-    if ((type === "upVote" && upVote) || (type === "downVote" && downVote)) {
-      setUpVote(false);
-      setDownVote(false);
-    }
-    if ((type === "upVote" && !upVote) || (type === "upVote" && downVote)) {
-      setUpVote(true);
-      setDownVote(false);
-    }
-    if ((type === "downVote" && !downVote) || (type === "downVote" && upVote)) {
-      setUpVote(false);
-      setDownVote(true);
-    }
-
-    const vote = {
-      vote_up: upVote,
-      vote_down: downVote,
-    };
-    console.log("vote", vote);
-
-    dispatch(setCurrentPlan(data));
-    dispatch(updateVotingCount(data));
-    dispatch(votePlan({ data: vote }));
-  };
-
   return (
     <div className="cardItem-container">
       <div className="cardItem-voting--btn-group">
         <div
           className={`vote-btn ${upVote && !downVote && "vote-on"}`}
-          onClick={() => votingHandler("upVote")}
+          onClick={() => {
+            setDownVote(false);
+            setUpVote(!upVote);
+          }}
         >
           <ArrowUpwardIcon />
         </div>
-        <h5>{plan_votes}</h5>
+        <h5>{plan_votes ? plan_votes : 0}</h5>
         <div
           className={`vote-btn  ${downVote && !upVote && "vote-on"}`}
-          onClick={() => votingHandler("downVote")}
+          onClick={() => {
+            setDownVote(!downVote);
+            setUpVote(false);
+          }}
         >
           <ArrowDownwardIcon />
         </div>

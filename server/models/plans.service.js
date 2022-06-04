@@ -36,6 +36,7 @@ const createPlan = ({ title, duration, location }, userId) => {
         plan_title: title,
         plan_duration: duration,
         plan_location: location,
+        plan_votes: 0,
       },
       "*"
     )
