@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import FormInput from "../../components/formInput/FormInput";
 import "./EditPlan.css";
 
-import { createPlan } from "../../features/plans/planSlice";
+import { editPlan } from "../../features/plans/planSlice";
 
 const EditPlan = () => {
   const { error_message, isLoading, currentPlan, durationOptions } =
@@ -14,14 +14,23 @@ const EditPlan = () => {
     duration: currentPlan.plan_duration,
     location: currentPlan.plan_location,
   });
-  const [destinations, setDestinations] = useState([
-    { name: "", address: "", type: "" },
-  ]);
 
+  const formatArray = currentPlan.destinations.map((item) => {
+    const destination = {
+      name: item.destination_name,
+      address: item.destination_address,
+      type: item.destination_type,
+    };
+    return destination;
+  });
+
+  const [destinations, setDestinations] = useState(formatArray);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log("currentPlan", currentPlan);
+  useEffect(() => {
+    Object.keys(currentPlan).length === 0 && navigate("/");
+  }, [currentPlan]);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -53,9 +62,9 @@ const EditPlan = () => {
       location !== ""
     ) {
       const plan = { title, location, duration, destinations: filteredD };
-      console.log("plan", plan);
-      console.log("duration", duration);
-      dispatch(createPlan({ data: plan }));
+      console.log("editplan page", plan);
+
+      dispatch(editPlan({ data: plan }));
 
       if (!error_message.message && currentPlan) {
         navigate("/");
@@ -80,21 +89,21 @@ const EditPlan = () => {
         <FormInput
           type="text"
           name="name"
-          value={destination.name}
+          values={destinations[index].name || ""}
           handleChange={(e) => arrayHandler(e)}
           placeholder="Destination Name"
         />
         <FormInput
           type="text"
           name="address"
-          value={destination.address}
+          values={destinations[index].address || ""}
           handleChange={(e) => arrayHandler(e)}
           placeholder="Destination Address"
         />
         <FormInput
           type="text"
           name="type"
-          value={destination.type}
+          values={destinations[index].type || ""}
           handleChange={(e) => arrayHandler(e)}
           placeholder="Destination Type"
         />
@@ -105,7 +114,7 @@ const EditPlan = () => {
   return (
     <div className="create-plan-container">
       <form className="form" onSubmit={onSubmit}>
-        <h3>Create Plan</h3>
+        <h3>Edit Plan</h3>
 
         <FormInput
           type="text"

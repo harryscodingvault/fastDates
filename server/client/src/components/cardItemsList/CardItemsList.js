@@ -24,7 +24,7 @@ const CardItemsList = () => {
   if (!plans.length) {
     return (
       <div className="cardItemsList-container">
-        <h5>Not jobs to display</h5>
+        <h5>No plans to show</h5>
       </div>
     );
   }

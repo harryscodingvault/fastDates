@@ -72,10 +72,10 @@ export const createPlan = createAsyncThunk(
 
 export const editPlan = createAsyncThunk(
   "plan/editPlan",
-  async (user, thunkAPI) => {
+  async (plan, thunkAPI) => {
     return editPlanThunk(
-      `/users/${thunkAPI.getState().user.user.user.id}`,
-      user,
+      `/plans/${thunkAPI.getState().plan.currentPlan.plan_id}`,
+      plan,
       thunkAPI
     );
   }
@@ -84,7 +84,6 @@ export const editPlan = createAsyncThunk(
 export const deletePlan = createAsyncThunk(
   "plan/deletePlan",
   async (plan_id, thunkAPI) => {
-    console.log(plan_id, `/plans/${plan_id}`);
     return deletePlanThunk(`/plans/${plan_id}`, thunkAPI);
   }
 );
@@ -169,7 +168,7 @@ const planSlice = createSlice({
     },
     [deletePlan.fulfilled]: (state) => {
       state.isLoading = false;
-      console.log("Plan deleted!");
+
       state.success_message = {
         origin: "deletePlan",
         message: "Plan deleted!",
@@ -182,6 +181,33 @@ const planSlice = createSlice({
       state.error_message = {
         origin: "deletePlan",
         message: payload || "Cant delete plan :(",
+      };
+    },
+    // EDIT PLAN
+    [editPlan.pending]: (state) => {
+      state.isLoading = true;
+      state.success_message = {
+        origin: "",
+        message: "",
+      };
+    },
+    [editPlan.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+      const { plan } = payload.data;
+      state.currentPlan = plan;
+      state.success_message = {
+        origin: "editPlan",
+        message: "Plan Updated!",
+      };
+      state.refresh_plans = true;
+      messageReset(state.success_message);
+    },
+    [editPlan.rejected]: (state, { payload }) => {
+      console.log("update failed");
+      state.isLoading = false;
+      state.error_message = {
+        origin: "editPlan",
+        message: payload || "Cant edit plan :(",
       };
     },
   },
