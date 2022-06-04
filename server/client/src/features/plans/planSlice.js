@@ -102,6 +102,9 @@ const planSlice = createSlice({
     refreshPlansList: (state) => {
       state.refresh_plans = false;
     },
+    setCurrentPlan: (state, plan) => {
+      state.currentPlan = plan.payload;
+    },
   },
   extraReducers: {
     // GET ALL PLANS
@@ -184,6 +187,6 @@ const planSlice = createSlice({
   },
 });
 
-export const { handleChange, clearValues, refreshPlansList } =
+export const { handleChange, clearValues, refreshPlansList, setCurrentPlan } =
   planSlice.actions;
 export default planSlice.reducer;

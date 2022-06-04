@@ -42,6 +42,7 @@ const getPlan = async (req, res) => {
   res.json({
     data: {
       plan: {
+        user_id: user.user_id,
         user: user.user_username,
         plan_id: plan.plan_id,
         title: plan.plan_title,
@@ -91,6 +92,7 @@ const getAllPlans = async (req, res) => {
           plan.plan_id
         );
         const newFormat = {
+          user_username: plan.user_username,
           user_id: plan.user_id,
           plan_id: plan.plan_id,
           plan_title: plan.plan_title,

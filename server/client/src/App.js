@@ -21,7 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/createplan" element={<CreatePlan />} />
-          <Route path="/editPlan" element={<EditPlan />} />
+          <Route path="/plan/:plantId/edit" element={<EditPlan />} />
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
