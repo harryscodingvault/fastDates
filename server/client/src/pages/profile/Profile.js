@@ -57,16 +57,23 @@ const Profile = () => {
         </button>
       </div>
       <form className="home-search-form form" onSubmit={onSubmit}>
-        <FormInput
-          type="location"
-          name="location"
-          values={user_queries.location}
-          handleChange={handlePlanInput}
-          placeholder="location"
-        />
-
+        <div className="search-location">
+          <div className="search-label">
+            <h5>Search plan by</h5>
+          </div>
+          <FormInput
+            type="location"
+            name="location"
+            values={user_queries.location}
+            handleChange={handlePlanInput}
+            placeholder="location"
+          />
+        </div>
         <div className="home-select-group">
-          <div className="form-row form-row-select">
+          <div className="form-row form-row-select time-select">
+            <div className="select-label">
+              <h5>Created this</h5>
+            </div>
             <select
               className="form-select"
               name="time"
@@ -83,22 +90,47 @@ const Profile = () => {
               })}
             </select>
           </div>
-          <div className="form-row form-row-select">
-            <select
-              name="duration"
-              id="duration"
-              value={user_queries.duration}
-              onChange={handlePlanInput}
-              className="form-select"
-            >
-              {durationOptions.map((itemValue, index) => {
-                return (
-                  <option key={index} value={itemValue}>
-                    {itemValue}
-                  </option>
-                );
-              })}
-            </select>
+          <div className="duration-select-group">
+            <div className="select-label">
+              <h5>Hourly length from</h5>
+            </div>
+            <div className="form-row form-row-select">
+              <select
+                name="duration_1"
+                id="duration_1"
+                value={user_queries.duration_1}
+                onChange={handlePlanInput}
+                className="form-select"
+              >
+                {durationOptions.map((itemValue, index) => {
+                  return (
+                    <option key={index} value={itemValue}>
+                      {itemValue}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+            <div className="select-label">
+              <h5>To</h5>
+            </div>
+            <div className="form-row form-row-select">
+              <select
+                name="duration_2"
+                id="duration_2"
+                value={user_queries.duration_2}
+                onChange={handlePlanInput}
+                className="form-select"
+              >
+                {durationOptions.map((itemValue, index) => {
+                  return (
+                    <option key={index} value={itemValue}>
+                      {itemValue}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
           </div>
         </div>
         <div className="home-search-btn-group">
