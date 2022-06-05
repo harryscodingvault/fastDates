@@ -19,13 +19,20 @@ const initialState = {
   user: getUserFromLocalStorage(),
   plans: [],
   user_plans: [],
-  user_queries: { time: "", duration: 0, location: "", currentPage: 1 },
+  user_queries: {
+    time: "",
+    duration_1: 0,
+    duration_2: 0,
+    location: "",
+    currentPage: 1,
+  },
   currentPlan: {},
   currentPage: 1,
   timeOptions: ["week", "month", "year"],
   time: "",
   durationOptions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-  duration: 0,
+  duration_1: 0,
+  duration_2: 0,
   location: "",
   refresh_plans: false,
 };
@@ -52,8 +59,10 @@ export const getAllPlans = createAsyncThunk(
     thunkAPI.getState().plan.time
       ? (queries += `&time=${thunkAPI.getState().plan.time}`)
       : (queries += "");
-    thunkAPI.getState().plan.duration !== 0
-      ? (queries += `&duration=0-${thunkAPI.getState().plan.duration}`)
+    thunkAPI.getState().plan.duration_2 !== 0
+      ? (queries += `&duration=${thunkAPI.getState().plan.duration_1}-${
+          thunkAPI.getState().plan.duration_2
+        }`)
       : (queries += "");
     thunkAPI.getState().plan.location
       ? (queries += `&location=${fLocation}`)
@@ -82,10 +91,10 @@ export const getUserPlans = createAsyncThunk(
     thunkAPI.getState().plan.user_queries.time
       ? (queries += `&time=${thunkAPI.getState().plan.user_queries.time}`)
       : (queries += "");
-    thunkAPI.getState().plan.user_queries.duration !== 0
-      ? (queries += `&duration=0-${
-          thunkAPI.getState().plan.user_queries.duration
-        }`)
+    thunkAPI.getState().plan.user_queries.duration_2 !== 0
+      ? (queries += `&duration=${
+          thunkAPI.getState().plan.user_queries.duration_1
+        }-${thunkAPI.getState().plan.user_queries.duration_2}`)
       : (queries += "");
     thunkAPI.getState().plan.user_queries.location
       ? (queries += `&location=${fLocation}`)
