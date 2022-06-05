@@ -11,7 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const CardItem = ({ data }) => {
-  const { user, currentPlan } = useSelector((store) => store.user);
+  const { user } = useSelector((store) => store.user);
   const {
     user_username,
     plan_duration,

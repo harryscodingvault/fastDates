@@ -14,6 +14,7 @@ import FormInput from "../../components/formInput/FormInput";
 
 const Home = () => {
   const { user } = useSelector((store) => store.user);
+  const { plans } = useSelector((store) => store.plan);
   const { timeOptions, durationOptions, time, duration, location } =
     useSelector((store) => store.plan);
   const dispatch = useDispatch();
@@ -49,7 +50,7 @@ const Home = () => {
         <FormInput
           type="location"
           name="location"
-          value={location}
+          values={location}
           handleChange={handlePlanInput}
           placeholder="location"
         />
@@ -60,7 +61,7 @@ const Home = () => {
               className="form-select"
               name="time"
               id="time"
-              values={time}
+              value={time}
               onChange={handlePlanInput}
             >
               {timeOptions.map((itemValue, index) => {
@@ -76,7 +77,7 @@ const Home = () => {
             <select
               name="duration"
               id="duration"
-              values={duration}
+              value={duration}
               onChange={handlePlanInput}
               className="form-select"
             >
@@ -104,7 +105,7 @@ const Home = () => {
         </div>
       </form>
       <div className="home-list">
-        <CardItemsList />
+        <CardItemsList plans={plans} />
       </div>
     </div>
   );

@@ -4,15 +4,6 @@ const moment = require("moment");
 const listPlans = ({ sLocation, fromT, sDuration, sPage, only, userId }) => {
   const currentTime = moment().format("YYYY/MM/DD");
   console.log({ currentTime, fromT });
-  if (only) {
-    console.log(only, userId, "listPlans");
-    return knex("plans as p")
-      .join("users as u", "p.user_id", "u.user_id")
-      .select("*")
-      .whereRaw(`p.user_id = ${userId}`)
-      .orderBy("plan_votes", "asc")
-      .paginate({ perPage: 10, currentPage: sPage });
-  }
   if (sLocation !== "n") {
     if (only) {
       return (
@@ -20,13 +11,22 @@ const listPlans = ({ sLocation, fromT, sDuration, sPage, only, userId }) => {
           .join("users as u", "p.user_id", "u.user_id")
           .select("*")
           .where({ plan_location: sLocation })
-          .where(`p.user_id = ${userId}`)
+          .whereRaw(`p.user_id = ${userId}`)
           .whereBetween("plan_duration", [sDuration[0], sDuration[1]])
           //.whereBetween("created_at", [fromT, currentTime])
           .orderBy("plan_votes", "desc")
           .paginate({ perPage: 10, currentPage: sPage })
       );
     }
+    if (only) {
+      return knex("plans as p")
+        .join("users as u", "p.user_id", "u.user_id")
+        .select("*")
+        .whereRaw(`p.user_id = ${userId}`)
+        .orderBy("plan_votes", "asc")
+        .paginate({ perPage: 10, currentPage: sPage });
+    }
+
     return (
       knex("plans as p")
         .join("users as u", "p.user_id", "u.user_id")

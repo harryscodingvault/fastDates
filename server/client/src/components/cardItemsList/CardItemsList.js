@@ -4,17 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 
 import CardItem from "../cardItem/CardItem";
 
-import { getAllPlans } from "../../features//plans/planSlice";
-import { refreshPlansList } from "../../features/plans/planSlice";
+import {
+  getAllPlans,
+  getUserPlans,
+  refreshPlansList,
+} from "../../features/plans/planSlice";
 
-const CardItemsList = () => {
-  const { plans, success_message, refresh_plans } = useSelector(
-    (store) => store.plan
-  );
+const CardItemsList = ({ plans }) => {
+  const { success_message, refresh_plans } = useSelector((store) => store.plan);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllPlans());
+    dispatch(getUserPlans());
     dispatch(refreshPlansList());
   }, [refresh_plans]);
 

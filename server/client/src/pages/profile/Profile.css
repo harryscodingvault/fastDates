@@ -4,7 +4,8 @@
     align-items:center;
     justify-content:center;
     width: 100%;
-    height:87vh;
+    height:100%;
+    margin-top: 3rem;
 }
 
 .profile-text-group{
@@ -23,4 +24,11 @@
 
 .profile-text-group span{
     color: var(--primary-500);
+}
+
+.profile-info{
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    margin-bottom: 2rem;
 }

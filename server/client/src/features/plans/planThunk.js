@@ -9,6 +9,15 @@ export const getAllPlansThunk = async (url, thunkAPI) => {
   }
 };
 
+export const getUserPlansThunk = async (url, thunkAPI) => {
+  try {
+    const res = await originFetch.get(url);
+    return res.data;
+  } catch (err) {
+    return thunkAPI.rejectWithValue(err.response.data.message);
+  }
+};
+
 export const getPlanThunk = async (url, plan, thunkAPI) => {
   try {
     const res = await originFetch.get(url);

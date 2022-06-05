@@ -18,6 +18,8 @@ const initialState = {
   isLoading: false,
   user: getUserFromLocalStorage(),
   plans: [],
+  user_plans: [],
+  user_queries: { time: "", duration: 0, location: "", currentPage: 1 },
   currentPlan: {},
   currentPage: 1,
   timeOptions: ["week", "month", "year"],
@@ -59,7 +61,40 @@ export const getAllPlans = createAsyncThunk(
 
     return getAllPlansThunk(
       `/plans?page=${thunkAPI.getState().plan.currentPage}${queries}`,
+      thunkAPI
+    );
+  }
+);
 
+export const getUserPlans = createAsyncThunk(
+  "plan/getUserPlans",
+  async (_, thunkAPI) => {
+    const fLocation = thunkAPI
+      .getState()
+      .plan.user_queries.location.toLowerCase()
+      .split(/[, ]+/)
+      .join("-");
+
+    let queries = "";
+    thunkAPI.getState().user?.user?.user.id
+      ? (queries += `&user=${thunkAPI.getState().user.user.user.id}&only=true`)
+      : (queries += "");
+    thunkAPI.getState().plan.user_queries.time
+      ? (queries += `&time=${thunkAPI.getState().plan.user_queries.time}`)
+      : (queries += "");
+    thunkAPI.getState().plan.user_queries.duration !== 0
+      ? (queries += `&duration=0-${
+          thunkAPI.getState().plan.user_queries.duration
+        }`)
+      : (queries += "");
+    thunkAPI.getState().plan.user_queries.location
+      ? (queries += `&location=${fLocation}`)
+      : (queries += "");
+
+    return getAllPlansThunk(
+      `/plans?page=${
+        thunkAPI.getState().plan.user_queries.currentPage
+      }${queries}`,
       thunkAPI
     );
   }
@@ -115,6 +150,9 @@ const planSlice = createSlice({
     handleChange: (state, { payload: { name, value } }) => {
       state[name] = value;
     },
+    handleUserChange: (state, { payload: { name, value } }) => {
+      state.user_queries[name] = value;
+    },
     clearValues: () => {
       return initialState;
     },
@@ -148,6 +186,24 @@ const planSlice = createSlice({
       state.isLoading = false;
       state.error_message = {
         origin: "getAllPlans",
+        message: payload || "Cant get plans :(",
+      };
+    },
+    // GET USER PLANS
+    [getUserPlans.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [getUserPlans.fulfilled]: (state, { payload }) => {
+      const { plans, paginate } = payload.data;
+      state.user_plans = plans;
+      state.user_queries.currentPage = paginate.currentPage;
+      state.isLoading = false;
+      state.error_message = { origin: "", message: "" };
+    },
+    [getUserPlans.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+      state.error_message = {
+        origin: "getUserPlans",
         message: payload || "Cant get plans :(",
       };
     },
@@ -276,6 +332,11 @@ const planSlice = createSlice({
   },
 });
 
-export const { handleChange, clearValues, refreshPlansList, setCurrentPlan } =
-  planSlice.actions;
+export const {
+  handleUserChange,
+  handleChange,
+  clearValues,
+  refreshPlansList,
+  setCurrentPlan,
+} = planSlice.actions;
 export default planSlice.reducer;
