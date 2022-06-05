@@ -19,8 +19,6 @@ const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log(time, duration, location, "search");
-
   const handlePlanInput = (e) => {
     const name = e.target.name;
     const value = e.target.value;

@@ -62,7 +62,6 @@ const EditPlan = () => {
       location !== ""
     ) {
       const plan = { title, location, duration, destinations: filteredD };
-      console.log("editplan page", plan);
 
       dispatch(editPlan({ data: plan }));
 
@@ -167,9 +166,18 @@ const EditPlan = () => {
         {isLoading ? (
           <div className="spinner"></div>
         ) : (
-          <button className="btn btn-block" type="submit">
-            <h5>Submit</h5>
-          </button>
+          <div className="edit-btn-group">
+            <button
+              className="btn btn-block"
+              type="button"
+              onClick={() => navigate("/")}
+            >
+              <h5>Cancel</h5>
+            </button>
+            <button className="btn btn-block" type="submit">
+              <h5>Submit</h5>
+            </button>
+          </div>
         )}
       </form>
     </div>

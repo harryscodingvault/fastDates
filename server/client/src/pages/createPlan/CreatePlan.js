@@ -157,9 +157,18 @@ const CreatePlan = () => {
         {isLoading ? (
           <div className="spinner"></div>
         ) : (
-          <button className="btn btn-block" type="submit">
-            <h5>Submit</h5>
-          </button>
+          <div className="create-plan-btn-group">
+            <button
+              className="btn btn-block"
+              type="button"
+              onClick={() => navigate("/")}
+            >
+              <h5>Cancel</h5>
+            </button>
+            <button className="btn btn-block" type="submit">
+              <h5>Submit</h5>
+            </button>
+          </div>
         )}
       </form>
     </div>

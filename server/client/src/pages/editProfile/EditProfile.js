@@ -121,15 +121,15 @@ const EditProfile = () => {
           <div className="spinner"></div>
         ) : (
           <div className="edit-profile-btn-group">
-            <button className="btn" type="submit">
-              <h5>Submit</h5>
-            </button>
             <button
               className="btn"
               type="button"
               onClick={() => navigate("/profile")}
             >
               <h5>Cancel</h5>
+            </button>
+            <button className="btn" type="submit">
+              <h5>Submit</h5>
             </button>
           </div>
         )}

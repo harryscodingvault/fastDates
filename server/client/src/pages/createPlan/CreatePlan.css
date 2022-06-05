@@ -39,3 +39,16 @@
     flex-direction: column;
    
 }
+
+.create-plan-btn-group{
+    width: 100%;
+    display: flex;
+    flex-direction:row;
+    justify-content:space-around;
+}
+
+.create-plan-btn-group .btn{
+    width: 45%;
+
+}
+

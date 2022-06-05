@@ -1,0 +1,9 @@
+.edit-btn-group{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+}
+.edit-btn-group .btn{
+    width: 45%;
+}
