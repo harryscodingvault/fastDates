@@ -52,3 +52,14 @@
     width: 100%;
     min-height: 34vh;
 }
+
+.home-search-btn-group{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.home-search-btn-group .btn{
+   width: 40%;
+}

@@ -4,7 +4,11 @@ import "./Home.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { handleChange } from "../../features/plans/planSlice";
+import {
+  handleChange,
+  clearValues,
+  getAllPlans,
+} from "../../features/plans/planSlice";
 
 import FormInput from "../../components/formInput/FormInput";
 
@@ -15,6 +19,8 @@ const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  console.log(time, duration, location, "search");
+
   const handlePlanInput = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -23,6 +29,12 @@ const Home = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    dispatch(getAllPlans());
+  };
+
+  const cancelSearchHandler = () => {
+    dispatch(clearValues());
+    dispatch(getAllPlans());
   };
 
   return (
@@ -80,9 +92,18 @@ const Home = () => {
             </select>
           </div>
         </div>
-        <button className="btn" type="submit">
-          Search
-        </button>
+        <div className="home-search-btn-group">
+          <button
+            className="btn"
+            type="button"
+            onClick={() => cancelSearchHandler()}
+          >
+            Cancel
+          </button>
+          <button className="btn" type="submit">
+            Search
+          </button>
+        </div>
       </form>
       <div className="home-list">
         <CardItemsList />

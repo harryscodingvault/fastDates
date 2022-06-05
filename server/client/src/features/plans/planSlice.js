@@ -37,7 +37,12 @@ const messageReset = (alert) => {
 export const getAllPlans = createAsyncThunk(
   "plan/getAllPlans",
   async (_, thunkAPI) => {
-    console.log();
+    const fLocation = thunkAPI
+      .getState()
+      .plan.location.toLowerCase()
+      .split(/[, ]+/)
+      .join("-");
+
     let queries = "";
     thunkAPI.getState().user?.user?.user.id
       ? (queries += `&user=${thunkAPI.getState().user.user.user.id}`)
@@ -46,10 +51,10 @@ export const getAllPlans = createAsyncThunk(
       ? (queries += `&time=${thunkAPI.getState().plan.time}`)
       : (queries += "");
     thunkAPI.getState().plan.duration !== 0
-      ? (queries += `&duration=${thunkAPI.getState().plan.duration}`)
+      ? (queries += `&duration=0-${thunkAPI.getState().plan.duration}`)
       : (queries += "");
     thunkAPI.getState().plan.location
-      ? (queries += `&location=${thunkAPI.getState().plan.location}`)
+      ? (queries += `&location=${fLocation}`)
       : (queries += "");
 
     return getAllPlansThunk(
@@ -118,6 +123,12 @@ const planSlice = createSlice({
     },
     setCurrentPlan: (state, { payload }) => {
       state.currentPlan = payload;
+    },
+    searchPlan: (state, { payload }) => {
+      console.log(payload);
+      state.time = payload.time;
+      state.duration = payload.duration;
+      state.location = payload.location;
     },
   },
   extraReducers: {
