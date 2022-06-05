@@ -23,15 +23,21 @@ const planExists = async (req, res, next) => {
 // UTILS
 
 function getLastWeek() {
-  return moment().subtract(7, "day").calendar();
+  const week = moment().subtract(7, "day").calendar();
+
+  return moment(week).format("YYYY-MM-DDTHH:mm:ssZ");
 }
 
 function getLastMonth() {
-  return moment().subtract(30, "day").calendar();
+  const month = moment().subtract(30, "day").calendar();
+
+  return moment(month).format("YYYY-MM-DDTHH:mm:ssZ");
 }
 
 function getLastYear() {
-  return moment().subtract(1, "year").calendar();
+  const year = moment().subtract(1, "year").calendar();
+
+  return moment(year).format("YYYY-MM-DDTHH:mm:ssZ");
 }
 
 // FUNCTIONS
@@ -77,7 +83,7 @@ const getAllPlans = async (req, res) => {
     month: getLastMonth(),
     year: getLastYear(),
   };
-  const fromT = moment(sTime[time] || sTime.year).format("YYYY/MM/DD");
+  const fromT = sTime[time] || sTime.year;
 
   const data = await plansService.listPlans({
     sLocation,

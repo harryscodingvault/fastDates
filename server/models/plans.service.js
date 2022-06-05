@@ -2,21 +2,22 @@ const knex = require("../db/connection.js");
 const moment = require("moment");
 
 const listPlans = ({ sLocation, fromT, sDuration, sPage, only, userId }) => {
-  const currentTime = moment().format("YYYY/MM/DD");
-  console.log({ currentTime, fromT });
+  const currentTime = moment().format("YYYY-MM-DDTHH:mm:ssZ");
+
   if (sLocation !== "n") {
     if (only) {
-      return (
-        knex("plans as p")
-          .join("users as u", "p.user_id", "u.user_id")
-          .select("*")
-          .where({ plan_location: sLocation })
-          .whereRaw(`p.user_id = ${userId}`)
-          .whereBetween("plan_duration", [sDuration[0], sDuration[1]])
-          //.whereBetween("created_at", [fromT, currentTime])
-          .orderBy("plan_votes", "desc")
-          .paginate({ perPage: 10, currentPage: sPage })
-      );
+      return knex("plans as p")
+        .join("users as u", "p.user_id", "u.user_id")
+        .select("*")
+        .where({ plan_location: sLocation })
+        .whereRaw(`p.user_id = ${userId}`)
+        .whereBetween("plan_duration", [sDuration[0], sDuration[1]])
+        .whereBetween("p.created_at", [
+          fromT.toString(),
+          currentTime.toString(),
+        ])
+        .orderBy("plan_votes", "desc")
+        .paginate({ perPage: 10, currentPage: sPage });
     }
     if (only) {
       return knex("plans as p")
@@ -27,17 +28,15 @@ const listPlans = ({ sLocation, fromT, sDuration, sPage, only, userId }) => {
         .paginate({ perPage: 10, currentPage: sPage });
     }
 
-    return (
-      knex("plans as p")
-        .join("users as u", "p.user_id", "u.user_id")
-        .select("*")
-        .where({ plan_location: sLocation })
-        .whereBetween("plan_duration", [sDuration[0], sDuration[1]])
-        //.whereBetween("created_at", [fromT, currentTime])
-        .orderBy("plan_votes", "desc")
+    return knex("plans as p")
+      .join("users as u", "p.user_id", "u.user_id")
+      .select("*")
+      .where({ plan_location: sLocation })
+      .whereBetween("plan_duration", [sDuration[0], sDuration[1]])
+      .whereBetween("p.created_at", [fromT.toString(), currentTime.toString()])
+      .orderBy("plan_votes", "desc")
 
-        .paginate({ perPage: 10, currentPage: sPage })
-    );
+      .paginate({ perPage: 10, currentPage: sPage });
   }
 
   return knex("plans as p")
