@@ -107,7 +107,7 @@ const getAllPlans = async (req, res) => {
           plan_duration: plan.plan_duration,
           plan_location: plan.plan_location,
           plan_votes: plan.plan_votes,
-          user_vote: user_vote,
+          user_vote: user_vote || null,
           destinations: destinations,
         };
 

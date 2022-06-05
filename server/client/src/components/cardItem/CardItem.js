@@ -22,13 +22,15 @@ const CardItem = ({ data }) => {
     user_vote,
   } = data;
 
+  console.log(user_vote, plan_title);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [upVote, setUpVote] = useState(false);
   const [downVote, setDownVote] = useState(false);
   const [voteClicked, setVoteClicked] = useState(false);
 
-  console.log(user_vote);
+  console.log(downVote, upVote, user_vote, "user_vote");
 
   useEffect(() => {
     const vote = {
@@ -40,7 +42,7 @@ const CardItem = ({ data }) => {
       dispatch(setCurrentPlan(data));
       dispatch(votePlan({ data: vote }));
     }
-  }, [upVote, downVote]);
+  }, [upVote, downVote, voteClicked]);
 
   const mapDestinations = destinations?.map((destination) => (
     <li key={destination.destination_id}>
@@ -64,11 +66,7 @@ const CardItem = ({ data }) => {
     <div className="cardItem-container">
       <div className="cardItem-voting--btn-group">
         <div
-          className={`vote-btn ${
-            ((user_vote?.vote_up && !user_vote?.vote_down) ||
-              (upVote && !downVote)) &&
-            "vote-on"
-          }`}
+          className={`vote-btn ${(user_vote?.vote_up || upVote) && "vote-on"}`}
           onClick={() => {
             setVoteClicked(true);
             setDownVote(false);
@@ -80,9 +78,7 @@ const CardItem = ({ data }) => {
         <h5>{plan_votes ? plan_votes : 0}</h5>
         <div
           className={`vote-btn  ${
-            ((!user_vote?.vote_up && user_vote?.vote_down) ||
-              (downVote && !upVote)) &&
-            "vote-on"
+            (downVote || user_vote?.vote_down) && "vote-on"
           }`}
           onClick={() => {
             setVoteClicked(true);
