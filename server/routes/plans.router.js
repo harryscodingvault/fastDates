@@ -11,6 +11,7 @@ const { votePlan, getVotesCount } = require("../controllers/votes.controller");
 const authenticateUser = require("../middleware/auth");
 
 router.route("/").get(getAllPlans).post(authenticateUser, createPlan);
+
 router
   .route("/:planId")
   .get(getPlan)

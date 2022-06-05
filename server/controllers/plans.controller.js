@@ -64,7 +64,7 @@ const getPlan = async (req, res) => {
 };
 
 const getAllPlans = async (req, res) => {
-  const { location, duration, time, page, user: userId } = req.query;
+  const { location, duration, time, page, user: userId, only } = req.query;
 
   const sPage = page;
   const sLocation = location?.split("-").join(", ") || "n";
@@ -84,6 +84,8 @@ const getAllPlans = async (req, res) => {
     fromT,
     sDuration,
     sPage,
+    only,
+    userId,
   });
 
   const formattedPlans = await Promise.all(
