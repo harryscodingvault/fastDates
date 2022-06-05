@@ -39,7 +39,7 @@ export const getAllPlans = createAsyncThunk(
   async (_, thunkAPI) => {
     console.log();
     let queries = "";
-    thunkAPI.getState().user.user.user.id
+    thunkAPI.getState().user?.user?.user.id
       ? (queries += `&user=${thunkAPI.getState().user.user.user.id}`)
       : (queries += "");
     thunkAPI.getState().plan.time

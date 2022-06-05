@@ -22,15 +22,11 @@ const CardItem = ({ data }) => {
     user_vote,
   } = data;
 
-  console.log(user_vote, plan_title);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [upVote, setUpVote] = useState(false);
   const [downVote, setDownVote] = useState(false);
   const [voteClicked, setVoteClicked] = useState(false);
-
-  console.log(downVote, upVote, user_vote, "user_vote");
 
   useEffect(() => {
     const vote = {
