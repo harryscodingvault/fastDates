@@ -60,10 +60,7 @@ const CreatePlan = () => {
 
       dispatch(createPlan({ data: plan }));
     }
-    if (
-      error_message.origin !== "createPlan" &&
-      Object.keys(currentPlan).length !== 0
-    ) {
+    if (error_message.origin !== "createPlan") {
       navigate("/");
     }
   };
@@ -142,7 +139,7 @@ const CreatePlan = () => {
           name="address"
           value={values.address}
           handleChange={handleChange}
-          placeholder="Address"
+          placeholder="Address Link"
         />
         <div className="create-plan-destinations-group">
           {renderDestinationsInputs}

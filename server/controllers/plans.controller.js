@@ -132,6 +132,10 @@ const getAllPlans = async (req, res) => {
 const createPlan = async (req, res) => {
   const { title, duration, location, destinations, address } = req.body.data;
 
+  if (!address.startsWith("https://goo.gl/maps/")) {
+    return res.status(400).json({ message: "It is not a google maps link" });
+  }
+
   const newPlan = { title, duration, location, address };
 
   const user = req.user;
@@ -172,6 +176,10 @@ const editPlan = async (req, res) => {
   if (req.user.userId === plan.user_id) {
     const newPlan = req.body.data;
     const { title, location, duration, destinations, address } = newPlan;
+
+    if (!address.startsWith("https://goo.gl/maps/")) {
+      return res.status(400).json({ message: "It is not a google maps link" });
+    }
 
     const editedPlan = await plansService.editPlan(
       { title, location, duration, address },
@@ -217,7 +225,7 @@ const deletePlan = async (req, res) => {
     await plansService.deletePlan(plan.plan_id);
     return res.send("Plan deleted!");
   }
-  res.status(404).json({ msg: "Action not allowed!" });
+  return res.status(404).json({ message: "Action not allowed!" });
 };
 
 module.exports = {

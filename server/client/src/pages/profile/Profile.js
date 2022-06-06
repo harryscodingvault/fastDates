@@ -21,6 +21,10 @@ const Profile = () => {
   );
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(getUserPlans(user));
+  }, []);
+
   const handlePlanInput = (e) => {
     const name = e.target.name;
     const value = e.target.value;

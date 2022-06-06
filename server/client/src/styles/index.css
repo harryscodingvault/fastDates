@@ -152,6 +152,8 @@ ul{
     transition: .3s ease;
     border-color: var(--primary-500);
     font-family: inherit;
+}
+.form-select{
     text-transform: capitalize;
 }
 

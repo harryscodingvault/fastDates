@@ -20,19 +20,19 @@ const initialState = {
   plans: [],
   user_plans: [],
   user_queries: {
-    time: "",
+    time: "year",
     duration_1: 0,
-    duration_2: 0,
+    duration_2: 10,
     location: "",
     currentPage: 1,
   },
   currentPlan: {},
   currentPage: 1,
   timeOptions: ["week", "month", "year"],
-  time: "",
+  time: "year",
   durationOptions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   duration_1: 0,
-  duration_2: 0,
+  duration_2: 10,
   location: "",
   address: "",
   refresh_plans: false,
@@ -246,6 +246,7 @@ const planSlice = createSlice({
     },
     [createPlan.rejected]: (state, { payload }) => {
       state.isLoading = false;
+
       state.error_message = {
         origin: "createPlan",
         message: payload || "Cant create plan :(",
@@ -261,7 +262,6 @@ const planSlice = createSlice({
     },
     [deletePlan.fulfilled]: (state) => {
       state.isLoading = false;
-
       state.success_message = {
         origin: "deletePlan",
         message: "Plan deleted!",
@@ -312,10 +312,10 @@ const planSlice = createSlice({
     },
     [votePlan.fulfilled]: (state, { payload }) => {
       state.isLoading = false;
-      const { total_votes } = payload.data.vote;
+      const total_votes = payload.data?.vote?.total_votes || 0;
 
       const updatedPlans = state.plans.map((plan) => {
-        if (plan.plan_id === payload.data.vote.plan_id) {
+        if (plan.plan_id === payload.data?.vote?.plan_id || 0) {
           return {
             ...plan,
             plan_votes: total_votes,

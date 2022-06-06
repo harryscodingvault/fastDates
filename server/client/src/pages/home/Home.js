@@ -1,8 +1,8 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import CardItemsList from "../../components/cardItemsList/CardItemsList";
 import "./Home.css";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import {
   handleChange,
@@ -22,9 +22,14 @@ const Home = () => {
     duration_1,
     duration_2,
     location,
+    refresh_plans,
   } = useSelector((store) => store.plan);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(getAllPlans());
+  }, []);
 
   const handlePlanInput = (e) => {
     const name = e.target.name;
@@ -52,6 +57,7 @@ const Home = () => {
           <h5>New Plan?</h5>
         </button>
       )}
+
       <form className="home-search-form form" onSubmit={onSubmit}>
         <div className="search-location">
           <div className="search-label">

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import "./CardItemsList.css";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -13,19 +13,21 @@ import {
 const CardItemsList = ({ plans }) => {
   const { success_message, refresh_plans } = useSelector((store) => store.plan);
   const dispatch = useDispatch();
+  const thisRef = useRef();
 
-  useEffect(() => {
-    dispatch(getAllPlans());
-    dispatch(getUserPlans());
-    dispatch(refreshPlansList());
-  }, [refresh_plans]);
+  const onScroll = () => {
+    const { scrollTop, scrollHeight, clientHeight } = thisRef?.current;
+    console.log(scrollTop, scrollHeight, clientHeight, "height");
+    if (scrollTop + clientHeight === scrollHeight) {
+      console.log("reached bottom");
+    }
+  };
 
   const listPlans = plans?.map((plan, index) => {
     if (Object.keys(plan).length !== 0 && plan !== undefined) {
       return <CardItem data={plan} key={index} />;
     }
   });
-
   if (!plans.length) {
     return (
       <div className="cardItemsList-container">
@@ -35,7 +37,11 @@ const CardItemsList = ({ plans }) => {
   }
 
   return plans ? (
-    <div className="cardItemsList-container">
+    <div
+      className="cardItemsList-container"
+      ref={thisRef}
+      onScroll={() => onScroll()}
+    >
       {success_message.origin === "deletePlan" && (
         <div className="alert alert-success">{success_message.message}</div>
       )}

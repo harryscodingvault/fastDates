@@ -7,6 +7,8 @@ import {
   deletePlan,
   setCurrentPlan,
   votePlan,
+  getAllPlans,
+  getUserPlans,
 } from "../../features/plans/planSlice";
 import { useNavigate } from "react-router-dom";
 
@@ -18,6 +20,7 @@ const CardItem = ({ data }) => {
     plan_title,
     plan_votes,
     plan_location,
+    plan_address,
     destinations,
     user_vote,
   } = data;
@@ -27,13 +30,19 @@ const CardItem = ({ data }) => {
   const [upVote, setUpVote] = useState(false);
   const [downVote, setDownVote] = useState(false);
   const [voteClicked, setVoteClicked] = useState(false);
+  const [hideCard, setHideCard] = useState(false);
+
+  useEffect(() => {
+    setDownVote(user_vote?.vote_down && !user_vote?.vote_up);
+    setUpVote(user_vote?.vote_up && !user_vote?.vote_down);
+  }, []);
 
   useEffect(() => {
     const vote = {
       vote_up: upVote,
       vote_down: downVote,
     };
-    if (vote && data.plan_id !== undefined && voteClicked) {
+    if (data.plan_id !== undefined && voteClicked) {
       setVoteClicked(false);
       dispatch(setCurrentPlan(data));
       dispatch(votePlan({ data: vote }));
@@ -51,6 +60,9 @@ const CardItem = ({ data }) => {
 
   const deleteHandler = () => {
     dispatch(deletePlan(data.plan_id));
+    dispatch(getAllPlans());
+    dispatch(getUserPlans(data));
+    setHideCard(true);
   };
 
   const editHandler = () => {
@@ -58,12 +70,19 @@ const CardItem = ({ data }) => {
     navigate(`plan/${data.plan_id}/edit`);
   };
 
+  const externalLinkHandler = () => {
+    window.location.href = plan_address;
+  };
+
+  console.log(hideCard);
+
   return (
-    <div className="cardItem-container">
+    <div className={`cardItem-container ${hideCard && "hidden"}`}>
       <div className="cardItem-voting--btn-group">
         <div
-          className={`vote-btn ${(user_vote?.vote_up || upVote) && "vote-on"}`}
+          className={`vote-btn ${upVote && "vote-on"}`}
           onClick={() => {
+            if (!user) navigate("/login");
             setVoteClicked(true);
             setDownVote(false);
             setUpVote(!upVote);
@@ -73,10 +92,9 @@ const CardItem = ({ data }) => {
         </div>
         <h5>{plan_votes ? plan_votes : 0}</h5>
         <div
-          className={`vote-btn  ${
-            (downVote || user_vote?.vote_down) && "vote-on"
-          }`}
+          className={`vote-btn  ${downVote && "vote-on"}`}
           onClick={() => {
+            if (!user) navigate("/login");
             setVoteClicked(true);
             setDownVote(!downVote);
             setUpVote(false);
@@ -85,7 +103,10 @@ const CardItem = ({ data }) => {
           <ArrowDownwardIcon />
         </div>
       </div>
-      <div className="cardItem-text-group">
+      <div
+        className="cardItem-text-group"
+        onClick={() => externalLinkHandler()}
+      >
         <p>Creator: {user_username}</p>
         <h4>{plan_title}</h4>
         <h5>
@@ -95,7 +116,10 @@ const CardItem = ({ data }) => {
           Duration: <span>{plan_duration}h</span>
         </h5>
       </div>
-      <div className="cardItem-destinations-container">
+      <div
+        className="cardItem-destinations-container"
+        onClick={() => externalLinkHandler()}
+      >
         <ul className="cardItem-destinations-list">{mapDestinations}</ul>
       </div>
 

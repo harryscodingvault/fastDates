@@ -41,8 +41,9 @@ const getVotesCount = async (req, res) => {
 
 const votePlan = async (req, res) => {
   const plan = res.locals.plan;
+  const { userId } = req.user;
+  const vote = await votesService.getVote(plan.plan_id, userId);
 
-  const vote = await votesService.getVote(plan.plan_id, plan.user_id);
   let newVote = req.body.data;
 
   if (vote) {
@@ -50,7 +51,7 @@ const votePlan = async (req, res) => {
       vote_id: vote.vote_id,
       vote_up: newVote.vote_up,
       vote_down: newVote.vote_down,
-      user_id: plan.user_id,
+      user_id: userId,
       plan_id: plan.plan_id,
     };
 
@@ -72,7 +73,7 @@ const votePlan = async (req, res) => {
   newVote = {
     vote_up: newVote.vote_up,
     vote_down: newVote.vote_down,
-    user_id: req.user.userId,
+    user_id: userId,
     plan_id: plan.plan_id,
   };
 

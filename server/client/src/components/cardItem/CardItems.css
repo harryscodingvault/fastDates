@@ -5,6 +5,10 @@
     border: 3px solid var(--primary-500);
     margin: 0.5rem 0rem;
 }
+.cardItem-container.hidden{
+   display: none;
+}
+
 .cardItem-text-group {
     width: 80%;
     height: 10rem;

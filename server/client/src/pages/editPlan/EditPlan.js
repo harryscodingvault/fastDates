@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FormInput from "../../components/formInput/FormInput";
 import "./EditPlan.css";
+import { GoDiffAdded, GoDiffRemoved } from "react-icons/go";
 
 import { editPlan } from "../../features/plans/planSlice";
 
@@ -151,20 +152,35 @@ const EditPlan = () => {
           name="address"
           values={values.address}
           handleChange={handleChange}
-          placeholder="Address"
+          placeholder="Address Link"
         />
         <div className="create-plan-destinations-group">
           {renderDestinationsInputs}
         </div>
-
-        {destinations.length !== 5 && (
-          <div
-            className="btn-add"
-            onClick={() => setDestinations([...destinations, {}])}
-          >
-            <h2>+</h2>
-          </div>
-        )}
+        <div className="destination-btn-group">
+          {destinations.length >= 2 && (
+            <div
+              className="btn-destination"
+              onClick={() => {
+                setDestinations(
+                  destinations.filter(
+                    (item, index) => index < destinations.length - 1
+                  )
+                );
+              }}
+            >
+              <GoDiffRemoved />
+            </div>
+          )}
+          {destinations.length <= 9 && (
+            <div
+              className="btn-destination"
+              onClick={() => setDestinations([...destinations, {}])}
+            >
+              <GoDiffAdded />
+            </div>
+          )}
+        </div>
         {error_message.origin === "createPlan" && (
           <div className="alert alert-danger">{error_message.message}</div>
         )}
