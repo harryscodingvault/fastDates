@@ -6,24 +6,34 @@
     margin-bottom: 2rem;
 }
 
-.create-plan-container .btn-add{
+.destination-btn-group{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.destination-btn-group .btn-destination{
     margin-top: 1rem;
    display: flex;
    align-items: center;
    justify-content: center;
-   width: 50%;
+   width: 45%;
    height:2.5rem;
    background-color: var(--primary-500);
    cursor: pointer;
 }
 
-.create-plan-container .btn-add:hover{
+
+.destination-btn-group .btn-destination:hover{
     background-color: var(--blue-light);
  }
- .create-plan-container .btn-add:active{
+ .destination-btn-group .btn-destination:active{
     background-color: var(--blue-dark);
  }
  
+
 
 .create-plan-destinations-group{
     display: flex;
@@ -49,6 +59,5 @@
 
 .create-plan-btn-group .btn{
     width: 45%;
-
 }
 
