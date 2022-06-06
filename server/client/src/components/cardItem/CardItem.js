@@ -74,8 +74,6 @@ const CardItem = ({ data }) => {
     window.location.href = plan_address;
   };
 
-  console.log(hideCard);
-
   return (
     <div className={`cardItem-container ${hideCard && "hidden"}`}>
       <div className="cardItem-voting--btn-group">

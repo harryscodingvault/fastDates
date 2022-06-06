@@ -35,14 +35,14 @@ const listPlans = ({ sLocation, fromT, sDuration, sPage, only, userId }) => {
       .join("users as u", "p.user_id", "u.user_id")
       .select("*")
       .whereRaw(`p.user_id = ${userId}`)
-      .orderBy("plan_votes", "asc")
+      .orderBy("plan_votes", "desc")
       .paginate({ perPage: 10, currentPage: sPage });
   }
 
   return knex("plans as p")
     .join("users as u", "p.user_id", "u.user_id")
     .select("*")
-    .orderBy("plan_votes", "asc")
+    .orderBy("plan_votes", "desc")
     .paginate({ perPage: 10, currentPage: sPage });
 };
 

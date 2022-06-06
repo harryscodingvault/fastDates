@@ -15,13 +15,17 @@ const CardItemsList = ({ plans }) => {
   const dispatch = useDispatch();
   const thisRef = useRef();
 
-  const onScroll = () => {
-    const { scrollTop, scrollHeight, clientHeight } = thisRef?.current;
-    console.log(scrollTop, scrollHeight, clientHeight, "height");
-    if (scrollTop + clientHeight === scrollHeight) {
-      console.log("reached bottom");
+  const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+  const scrolled = window.scrollY;
+
+  useEffect(() => {
+    if (plans) {
+      console.log("scrolling", scrolled, scrollable);
+      if (scrolled === scrollable) {
+        console.log("bottom reached");
+      }
     }
-  };
+  }, [scrollable, scrolled]);
 
   const listPlans = plans?.map((plan, index) => {
     if (Object.keys(plan).length !== 0 && plan !== undefined) {
@@ -37,11 +41,7 @@ const CardItemsList = ({ plans }) => {
   }
 
   return plans ? (
-    <div
-      className="cardItemsList-container"
-      ref={thisRef}
-      onScroll={() => onScroll()}
-    >
+    <div className="cardItemsList-container" ref={thisRef}>
       {success_message.origin === "deletePlan" && (
         <div className="alert alert-success">{success_message.message}</div>
       )}
