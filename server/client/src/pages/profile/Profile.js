@@ -66,7 +66,7 @@ const Profile = () => {
             name="location"
             values={user_queries.location}
             handleChange={handlePlanInput}
-            placeholder="location"
+            placeholder="City, State"
           />
         </div>
         <div className="home-select-group">

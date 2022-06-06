@@ -152,6 +152,7 @@ ul{
     transition: .3s ease;
     border-color: var(--primary-500);
     font-family: inherit;
+    text-transform: capitalize;
 }
 
 .form-textarea{

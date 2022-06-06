@@ -13,12 +13,12 @@ const EditPlan = () => {
     title: currentPlan.plan_title,
     duration: currentPlan.plan_duration,
     location: currentPlan.plan_location,
+    address: currentPlan.plan_address,
   });
 
   const formatArray = currentPlan.destinations.map((item) => {
     const destination = {
       name: item.destination_name,
-      address: item.destination_address,
       type: item.destination_type,
     };
     return destination;
@@ -41,14 +41,12 @@ const EditPlan = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const { title, duration, location } = values;
+    const { title, duration, location, address } = values;
 
     const filteredD = destinations.filter((item) => {
       return (
-        item.address !== "" &&
         item.name !== "" &&
         item.type !== "" &&
-        item.hasOwnProperty("address") &&
         item.hasOwnProperty("name") &&
         item.hasOwnProperty("type") &&
         Object.keys(item).length !== 0
@@ -59,9 +57,16 @@ const EditPlan = () => {
       filteredD.length >= 1 &&
       duration !== "" &&
       title !== "" &&
-      location !== ""
+      location !== "" &&
+      address !== ""
     ) {
-      const plan = { title, location, duration, destinations: filteredD };
+      const plan = {
+        title,
+        location,
+        address,
+        duration,
+        destinations: filteredD,
+      };
 
       dispatch(editPlan({ data: plan }));
 
@@ -92,13 +97,7 @@ const EditPlan = () => {
           handleChange={(e) => arrayHandler(e)}
           placeholder="Destination Name"
         />
-        <FormInput
-          type="text"
-          name="address"
-          values={destinations[index].address || ""}
-          handleChange={(e) => arrayHandler(e)}
-          placeholder="Destination Address"
-        />
+
         <FormInput
           type="text"
           name="type"
@@ -146,6 +145,13 @@ const EditPlan = () => {
           values={values.location}
           handleChange={handleChange}
           placeholder="Location"
+        />
+        <FormInput
+          type="text"
+          name="address"
+          values={values.address}
+          handleChange={handleChange}
+          placeholder="Address"
         />
         <div className="create-plan-destinations-group">
           {renderDestinationsInputs}

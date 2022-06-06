@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FormInput from "../../components/formInput/FormInput";
 import "./CreatePlan.css";
+import { GoDiffAdded, GoDiffRemoved } from "react-icons/go";
 
 import { createPlan } from "../../features/plans/planSlice";
 
@@ -10,13 +11,12 @@ const initialState = {
   title: "",
   duration: 1,
   location: "",
+  address: "",
 };
 
 const CreatePlan = () => {
   const [values, setValues] = useState(initialState);
-  const [destinations, setDestinations] = useState([
-    { name: "", address: "", type: "" },
-  ]);
+  const [destinations, setDestinations] = useState([{ name: "", type: "" }]);
   const { error_message, isLoading, currentPlan, durationOptions } =
     useSelector((store) => store.plan);
   const dispatch = useDispatch();
@@ -31,14 +31,12 @@ const CreatePlan = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const { title, duration, location } = values;
+    const { title, duration, location, address } = values;
 
     const filteredD = destinations.filter((item) => {
       return (
-        item.address !== "" &&
         item.name !== "" &&
         item.type !== "" &&
-        item.hasOwnProperty("address") &&
         item.hasOwnProperty("name") &&
         item.hasOwnProperty("type") &&
         Object.keys(item).length !== 0
@@ -49,16 +47,24 @@ const CreatePlan = () => {
       filteredD.length >= 1 &&
       duration !== "" &&
       title !== "" &&
-      location !== ""
+      location !== "" &&
+      address !== ""
     ) {
-      const plan = { title, location, duration, destinations: filteredD };
-      console.log("plan", plan);
-      console.log("duration", duration);
-      dispatch(createPlan({ data: plan }));
+      const plan = {
+        title,
+        location,
+        duration,
+        address,
+        destinations: filteredD,
+      };
 
-      if (!error_message.message && currentPlan) {
-        navigate("/");
-      }
+      dispatch(createPlan({ data: plan }));
+    }
+    if (
+      error_message.origin !== "createPlan" &&
+      Object.keys(currentPlan).length !== 0
+    ) {
+      navigate("/");
     }
   };
 
@@ -82,13 +88,6 @@ const CreatePlan = () => {
           value={destination.name}
           handleChange={(e) => arrayHandler(e)}
           placeholder="Destination Name"
-        />
-        <FormInput
-          type="text"
-          name="address"
-          value={destination.address}
-          handleChange={(e) => arrayHandler(e)}
-          placeholder="Destination Address"
         />
         <FormInput
           type="text"
@@ -136,20 +135,43 @@ const CreatePlan = () => {
           name="location"
           value={values.location}
           handleChange={handleChange}
-          placeholder="Location"
+          placeholder="City, State"
+        />
+        <FormInput
+          type="text"
+          name="address"
+          value={values.address}
+          handleChange={handleChange}
+          placeholder="Address"
         />
         <div className="create-plan-destinations-group">
           {renderDestinationsInputs}
         </div>
 
-        {destinations.length !== 5 && (
-          <div
-            className="btn-add"
-            onClick={() => setDestinations([...destinations, {}])}
-          >
-            <h2>+</h2>
-          </div>
-        )}
+        <div className="destination-btn-group">
+          {destinations.length >= 2 && (
+            <div
+              className="btn-destination"
+              onClick={() => {
+                setDestinations(
+                  destinations.filter(
+                    (item, index) => index < destinations.length - 1
+                  )
+                );
+              }}
+            >
+              <GoDiffRemoved />
+            </div>
+          )}
+          {destinations.length <= 9 && (
+            <div
+              className="btn-destination"
+              onClick={() => setDestinations([...destinations, {}])}
+            >
+              <GoDiffAdded />
+            </div>
+          )}
+        </div>
         {error_message.origin === "createPlan" && (
           <div className="alert alert-danger">{error_message.message}</div>
         )}

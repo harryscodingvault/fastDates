@@ -62,7 +62,7 @@ const Home = () => {
             name="location"
             values={location}
             handleChange={handlePlanInput}
-            placeholder="location"
+            placeholder="City, State"
           />
         </div>
         <div className="home-select-group">

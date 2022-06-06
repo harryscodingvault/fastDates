@@ -131,13 +131,14 @@ const getAllPlans = async (req, res) => {
 
 const createPlan = async (req, res) => {
   const { title, duration, location, destinations, address } = req.body.data;
+
   const newPlan = { title, duration, location, address };
 
   const user = req.user;
 
   const saved_plan = await plansService.createPlan(newPlan, user.userId);
 
-  destinations.slice(0, 5).map(async (destination) => {
+  destinations.slice(0, 10).map(async (destination) => {
     await destinationsService.createDestination(
       destination,
       saved_plan.plan_id

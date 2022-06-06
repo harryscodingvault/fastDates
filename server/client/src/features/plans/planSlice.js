@@ -34,6 +34,7 @@ const initialState = {
   duration_1: 0,
   duration_2: 0,
   location: "",
+  address: "",
   refresh_plans: false,
 };
 
