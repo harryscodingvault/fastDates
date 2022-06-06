@@ -50,7 +50,7 @@ const getPlan = (planId) => {
   return knex("plans").select("*").where({ plan_id: planId }).first();
 };
 
-const createPlan = ({ title, duration, location }, userId) => {
+const createPlan = ({ title, duration, location, address }, userId) => {
   return knex("plans")
     .insert(
       {
@@ -58,6 +58,7 @@ const createPlan = ({ title, duration, location }, userId) => {
         plan_title: title,
         plan_duration: duration,
         plan_location: location,
+        plan_address: address,
         plan_votes: 0,
       },
       "*"
@@ -65,12 +66,13 @@ const createPlan = ({ title, duration, location }, userId) => {
     .then((createdRecords) => createdRecords[0]);
 };
 
-const editPlan = ({ title, location, duration }, planId) => {
+const editPlan = ({ title, location, duration, address }, planId) => {
   return knex("plans").select("*").where({ plan_id: planId }).update(
     {
       plan_title: title,
       plan_location: location,
       plan_duration: duration,
+      plan_address: address,
     },
     "*"
   );

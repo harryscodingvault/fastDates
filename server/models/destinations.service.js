@@ -4,13 +4,12 @@ const getDestinations = (planId) => {
   return knex("destinations").select("*").where({ plan_id: planId });
 };
 
-const createDestination = ({ type, name, address }, planId) => {
+const createDestination = ({ type, name }, planId) => {
   return knex("destinations")
     .insert(
       {
         destination_type: type,
         destination_name: name,
-        destination_address: address,
         plan_id: planId,
       },
       "*"

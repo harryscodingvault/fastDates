@@ -3,7 +3,6 @@ exports.up = function (knex) {
     table.increments("destination_id").primary();
     table.string("destination_type");
     table.string("destination_name");
-    table.string("destination_address");
     table.integer("plan_id").unsigned().notNullable();
     table
       .foreign("plan_id")

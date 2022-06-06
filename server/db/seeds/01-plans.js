@@ -7,7 +7,8 @@ exports.seed = async function (knex) {
       plan_title: "Weekend Hangout",
       plan_duration: 4,
       plan_location: "phoenix, az",
-      plan_travel_time: "10",
+      plan_address: "plan_address_1",
+
       plan_votes: 30,
       user_id: 1,
     },
@@ -16,7 +17,8 @@ exports.seed = async function (knex) {
       plan_title: "Simple date",
       plan_duration: 1,
       plan_location: "phoenix, az",
-      plan_travel_time: "10",
+      plan_address: "plan_address_2",
+
       plan_votes: 20,
       user_id: 2,
     },
@@ -25,7 +27,8 @@ exports.seed = async function (knex) {
       plan_title: "Fancy date",
       plan_duration: 4,
       plan_location: "phoenix, az",
-      plan_travel_time: "10",
+      plan_address: "plan_address_3",
+
       plan_votes: 60,
       user_id: 3,
     },

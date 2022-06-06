@@ -55,13 +55,12 @@ const getPlan = async (req, res) => {
         title: plan.plan_title,
         location: plan.plan_location,
         duration: plan.plan_duration,
-
+        address: plan.plan_address,
         votes: plan.plan_votes,
         destinations: destinations.map((destination) => {
           return {
             type: destination.destination_type,
             name: destination.destination_name,
-            address: destination.destination_address,
           };
         }),
       },
@@ -114,6 +113,7 @@ const getAllPlans = async (req, res) => {
           plan_title: plan.plan_title,
           plan_duration: plan.plan_duration,
           plan_location: plan.plan_location,
+          plan_address: plan.plan_address,
           plan_votes: plan.plan_votes,
           user_vote: user_vote || null,
           destinations: destinations,
@@ -130,8 +130,8 @@ const getAllPlans = async (req, res) => {
 };
 
 const createPlan = async (req, res) => {
-  const { title, duration, location, destinations } = req.body.data;
-  const newPlan = { title, duration, location };
+  const { title, duration, location, destinations, address } = req.body.data;
+  const newPlan = { title, duration, location, address };
 
   const user = req.user;
 
@@ -154,12 +154,11 @@ const createPlan = async (req, res) => {
         title: saved_plan.plan_title,
         duration: saved_plan.plan_duration,
         location: saved_plan.plan_location,
-
+        address: saved_plan.plan_address,
         destinations: saved_destinations.map((destination) => {
           return {
             type: destination.destination_type,
             name: destination.destination_name,
-            address: destination.destination_address,
           };
         }),
       },
@@ -171,10 +170,10 @@ const editPlan = async (req, res) => {
   const plan = res.locals.plan;
   if (req.user.userId === plan.user_id) {
     const newPlan = req.body.data;
-    const { title, location, duration, destinations } = newPlan;
+    const { title, location, duration, destinations, address } = newPlan;
 
     const editedPlan = await plansService.editPlan(
-      { title, location, duration },
+      { title, location, duration, address },
       plan.plan_id
     );
 
@@ -196,11 +195,11 @@ const editPlan = async (req, res) => {
           title: editedPlan[0].plan_title,
           duration: editedPlan[0].plan_duration,
           location: editedPlan[0].plan_location,
-
+          address: editedPlan[0].plan_address,
           destinations: plan_destinations.map((destination) => {
             return {
               type: destination.destination_type,
-              address: destination.destination_address,
+              name: destination.destination_name,
             };
           }),
         },

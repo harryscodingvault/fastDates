@@ -4,6 +4,7 @@ exports.up = function (knex) {
     table.string("plan_title");
     table.integer("plan_duration");
     table.string("plan_location");
+    table.string("plan_address");
     table.integer("plan_votes");
     table.integer("user_id").unsigned().notNullable();
     table
