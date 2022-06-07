@@ -27,14 +27,15 @@ const CardItem = ({ data }) => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [upVote, setUpVote] = useState(false);
-  const [downVote, setDownVote] = useState(false);
+  const [upVote, setUpVote] = useState(null);
+  const [downVote, setDownVote] = useState(null);
   const [voteClicked, setVoteClicked] = useState(false);
   const [hideCard, setHideCard] = useState(false);
 
   useEffect(() => {
-    setDownVote(user_vote?.vote_down && !user_vote?.vote_up);
-    setUpVote(user_vote?.vote_up && !user_vote?.vote_down);
+    console.log(user_vote?.vote_down, user_vote?.vote_up, plan_title);
+    setDownVote(user_vote?.vote_down);
+    setUpVote(user_vote?.vote_up);
   }, []);
 
   useEffect(() => {

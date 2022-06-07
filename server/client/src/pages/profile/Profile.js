@@ -21,7 +21,7 @@ const Profile = () => {
     (store) => store.plan
   );
   const dispatch = useDispatch();
-  console.log(user_queries.currentItemsQty);
+
   useEffect(() => {
     dispatch(getUserPlans(user));
   }, []);
