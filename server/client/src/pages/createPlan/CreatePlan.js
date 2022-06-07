@@ -17,8 +17,9 @@ const initialState = {
 const CreatePlan = () => {
   const [values, setValues] = useState(initialState);
   const [destinations, setDestinations] = useState([{ name: "", type: "" }]);
-  const { error_message, isLoading, currentPlan, durationOptions } =
-    useSelector((store) => store.plan);
+  const { error_message, isLoading, durationOptions } = useSelector(
+    (store) => store.plan
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

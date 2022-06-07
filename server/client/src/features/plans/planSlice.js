@@ -1,5 +1,4 @@
-import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
-import originFetch from "../../utils/axios";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { getUserFromLocalStorage } from "../../utils/localStorage";
 

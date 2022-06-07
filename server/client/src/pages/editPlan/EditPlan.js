@@ -31,7 +31,7 @@ const EditPlan = () => {
 
   useEffect(() => {
     Object.keys(currentPlan).length === 0 && navigate("/");
-  }, [currentPlan]);
+  }, [currentPlan, navigate]);
 
   const handleChange = (e) => {
     const name = e.target.name;

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useEffect } from "react";
 import CardItemsList from "../../components/cardItemsList/CardItemsList";
 import "./Home.css";
 import { useSelector, useDispatch } from "react-redux";
@@ -30,7 +30,7 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(getAllPlans());
-  }, []);
+  }, [dispatch]);
 
   const handlePlanInput = (e) => {
     const name = e.target.name;

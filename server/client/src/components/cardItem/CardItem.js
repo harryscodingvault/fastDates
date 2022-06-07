@@ -33,10 +33,9 @@ const CardItem = ({ data }) => {
   const [hideCard, setHideCard] = useState(false);
 
   useEffect(() => {
-    console.log(user_vote?.vote_down, user_vote?.vote_up, plan_title);
     setDownVote(user_vote?.vote_down);
     setUpVote(user_vote?.vote_up);
-  }, []);
+  }, [user_vote?.vote_up, user_vote?.vote_down]);
 
   useEffect(() => {
     const vote = {
@@ -48,7 +47,7 @@ const CardItem = ({ data }) => {
       dispatch(setCurrentPlan(data));
       dispatch(votePlan({ data: vote }));
     }
-  }, [upVote, downVote, voteClicked]);
+  }, [upVote, downVote, voteClicked, data, dispatch]);
 
   const mapDestinations = destinations?.map((destination) => (
     <li key={destination.destination_id}>

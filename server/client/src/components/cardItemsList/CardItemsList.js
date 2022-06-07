@@ -1,26 +1,20 @@
 import React from "react";
 import "./CardItemsList.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import CardItem from "../cardItem/CardItem";
 
-import {
-  getAllPlans,
-  getUserPlans,
-  increasePage,
-} from "../../features/plans/planSlice";
-
 const CardItemsList = ({ plans }) => {
-  const { success_message, user_queries, currentItemsQty } = useSelector(
-    (store) => store.plan
-  );
-  const dispatch = useDispatch();
+  const { success_message } = useSelector((store) => store.plan);
 
-  const listPlans = plans?.map((plan, index) => {
-    if (Object.keys(plan).length !== 0 && plan !== undefined) {
+  const listPlans = plans
+    ?.filter((plan) => {
+      return Object.keys(plan).length !== 0 && plan !== undefined;
+    })
+    .map((plan, index) => {
       return <CardItem data={plan} key={index} />;
-    }
-  });
+    });
+
   if (!plans.length) {
     return (
       <div className="cardItemsList-container">
