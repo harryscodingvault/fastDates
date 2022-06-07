@@ -21,6 +21,7 @@ const EditPlan = () => {
     const destination = {
       name: item.destination_name,
       type: item.destination_type,
+      id: item.destination_id,
     };
     return destination;
   });

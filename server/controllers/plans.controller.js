@@ -62,6 +62,7 @@ const getPlan = async (req, res) => {
           return {
             type: destination.destination_type,
             name: destination.destination_name,
+            destination_id: destination.destination_id,
           };
         }),
       },
@@ -143,12 +144,15 @@ const createPlan = async (req, res) => {
 
   const saved_plan = await plansService.createPlan(newPlan, user.userId);
 
-  destinations.slice(0, 10).map(async (destination) => {
-    await destinationsService.createDestination(
-      destination,
-      saved_plan.plan_id
-    );
-  });
+  await Promise.all(
+    destinations.slice(0, 10).map(async (destination) => {
+      await destinationsService.createDestination(
+        destination,
+        saved_plan.plan_id
+      );
+    })
+  );
+
   const saved_destinations = await destinationsService.getDestinations(
     saved_plan.plan_id
   );
@@ -165,6 +169,7 @@ const createPlan = async (req, res) => {
           return {
             type: destination.destination_type,
             name: destination.destination_name,
+            destination_id: destination.destination_id,
           };
         }),
       },
@@ -176,6 +181,7 @@ const editPlan = async (req, res) => {
   const plan = res.locals.plan;
   if (req.user.userId === plan.user_id) {
     const newPlan = req.body.data;
+
     const { title, location, duration, destinations, address } = newPlan;
 
     if (!address.startsWith("https://goo.gl/maps/")) {
@@ -187,13 +193,28 @@ const editPlan = async (req, res) => {
       plan.plan_id
     );
 
-    await destinationsService.deleteDestinations(plan.plan_id);
-    destinations.slice(0, 5).map(async (destination) => {
-      return await destinationsService.createDestination(
-        destination,
-        plan.plan_id
-      );
-    });
+    await Promise.all(
+      destinations.slice(0, 10).map(async (destination) => {
+        if (destination.id) {
+          const destination_exist = await destinationsService.getDestination({
+            destination_id: destination.id,
+          });
+
+          if (destination_exist) {
+            return await destinationsService.updateDestination(
+              destination,
+              destination_exist[0].destination_id
+            );
+          }
+        }
+
+        return await destinationsService.createDestination(
+          destination,
+          plan.plan_id
+        );
+      })
+    );
+
     const plan_destinations = await destinationsService.getDestinations(
       plan.plan_id
     );
