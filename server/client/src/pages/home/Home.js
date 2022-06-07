@@ -2,12 +2,13 @@ import React, { useRef, useEffect } from "react";
 import CardItemsList from "../../components/cardItemsList/CardItemsList";
 import "./Home.css";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import {
   handleChange,
   clearValues,
   getAllPlans,
+  increasePage,
 } from "../../features/plans/planSlice";
 
 import FormInput from "../../components/formInput/FormInput";
@@ -22,7 +23,7 @@ const Home = () => {
     duration_1,
     duration_2,
     location,
-    refresh_plans,
+    currentItemsQty,
   } = useSelector((store) => store.plan);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -142,7 +143,7 @@ const Home = () => {
             type="button"
             onClick={() => cancelSearchHandler()}
           >
-            Cancel
+            Reset
           </button>
           <button className="btn" type="submit">
             Search
@@ -152,6 +153,17 @@ const Home = () => {
       <div className="home-list">
         <CardItemsList plans={plans} />
       </div>
+      {currentItemsQty === 20 && (
+        <div
+          className="btn more-plans-btn"
+          onClick={() => {
+            dispatch(increasePage());
+            dispatch(getAllPlans());
+          }}
+        >
+          <h5>More</h5>
+        </div>
+      )}
     </div>
   );
 };

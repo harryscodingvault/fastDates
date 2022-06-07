@@ -17,7 +17,7 @@ const listPlans = ({ sLocation, fromT, sDuration, sPage, only, userId }) => {
           currentTime.toString(),
         ])
         .orderBy("plan_votes", "desc")
-        .paginate({ perPage: 10, currentPage: sPage });
+        .paginate({ perPage: 20, currentPage: sPage });
     }
 
     return knex("plans as p")
@@ -28,7 +28,7 @@ const listPlans = ({ sLocation, fromT, sDuration, sPage, only, userId }) => {
       .whereBetween("p.created_at", [fromT.toString(), currentTime.toString()])
       .orderBy("plan_votes", "desc")
 
-      .paginate({ perPage: 10, currentPage: sPage });
+      .paginate({ perPage: 20, currentPage: sPage });
   }
   if (only) {
     return knex("plans as p")
@@ -36,14 +36,14 @@ const listPlans = ({ sLocation, fromT, sDuration, sPage, only, userId }) => {
       .select("*")
       .whereRaw(`p.user_id = ${userId}`)
       .orderBy("plan_votes", "desc")
-      .paginate({ perPage: 10, currentPage: sPage });
+      .paginate({ perPage: 20, currentPage: sPage });
   }
 
   return knex("plans as p")
     .join("users as u", "p.user_id", "u.user_id")
     .select("*")
     .orderBy("plan_votes", "desc")
-    .paginate({ perPage: 10, currentPage: sPage });
+    .paginate({ perPage: 20, currentPage: sPage });
 };
 
 const getPlan = (planId) => {

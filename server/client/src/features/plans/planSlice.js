@@ -25,9 +25,11 @@ const initialState = {
     duration_2: 10,
     location: "",
     currentPage: 1,
+    currentItemsQty: null,
   },
   currentPlan: {},
   currentPage: 1,
+  currentItemsQty: null,
   timeOptions: ["week", "month", "year"],
   time: "year",
   durationOptions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -35,6 +37,7 @@ const initialState = {
   duration_2: 10,
   location: "",
   address: "",
+
   refresh_plans: false,
 };
 
@@ -173,10 +176,16 @@ const planSlice = createSlice({
       state.currentPlan = payload;
     },
     searchPlan: (state, { payload }) => {
-      console.log(payload);
       state.time = payload.time;
       state.duration = payload.duration;
       state.location = payload.location;
+    },
+    increasePage: (state, { payload }) => {
+      if (payload) {
+        state.user_queries.currentPage =
+          parseInt(state.user_queries.currentPage) + 1;
+      }
+      state.currentPage = parseInt(state.currentPage) + 1;
     },
   },
   extraReducers: {
@@ -186,9 +195,14 @@ const planSlice = createSlice({
     },
     [getAllPlans.fulfilled]: (state, { payload }) => {
       const { plans, paginate } = payload.data;
+      if (state.plans.length > 0 && state.currentPage !== 1) {
+        state.plans = [...state.plans, ...plans];
+      } else {
+        state.plans = plans;
+      }
 
-      state.plans = plans;
       state.currentPage = paginate.currentPage;
+      state.currentItemsQty = paginate.to - paginate.from;
       state.isLoading = false;
       state.error_message = { origin: "", message: "" };
     },
@@ -205,8 +219,13 @@ const planSlice = createSlice({
     },
     [getUserPlans.fulfilled]: (state, { payload }) => {
       const { plans, paginate } = payload.data;
-      state.user_plans = plans;
+      if (state.user_plans.length > 0 && state.user_queries.currentPage !== 1) {
+        state.plans = [...state.user_plans, ...plans];
+      } else {
+        state.user_plans = plans;
+      }
       state.user_queries.currentPage = paginate.currentPage;
+      state.user_queries.currentItemsQty = paginate.to - paginate.from;
       state.isLoading = false;
       state.error_message = { origin: "", message: "" };
     },
@@ -348,5 +367,6 @@ export const {
   clearValues,
   refreshPlansList,
   setCurrentPlan,
+  increasePage,
 } = planSlice.actions;
 export default planSlice.reducer;

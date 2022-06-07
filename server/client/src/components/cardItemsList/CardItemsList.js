@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import "./CardItemsList.css";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -7,25 +7,14 @@ import CardItem from "../cardItem/CardItem";
 import {
   getAllPlans,
   getUserPlans,
-  refreshPlansList,
+  increasePage,
 } from "../../features/plans/planSlice";
 
 const CardItemsList = ({ plans }) => {
-  const { success_message, refresh_plans } = useSelector((store) => store.plan);
+  const { success_message, user_queries, currentItemsQty } = useSelector(
+    (store) => store.plan
+  );
   const dispatch = useDispatch();
-  const thisRef = useRef();
-
-  const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-  const scrolled = window.scrollY;
-
-  useEffect(() => {
-    if (plans) {
-      console.log("scrolling", scrolled, scrollable);
-      if (scrolled === scrollable) {
-        console.log("bottom reached");
-      }
-    }
-  }, [scrollable, scrolled]);
 
   const listPlans = plans?.map((plan, index) => {
     if (Object.keys(plan).length !== 0 && plan !== undefined) {
@@ -41,7 +30,7 @@ const CardItemsList = ({ plans }) => {
   }
 
   return plans ? (
-    <div className="cardItemsList-container" ref={thisRef}>
+    <div className="cardItemsList-container">
       {success_message.origin === "deletePlan" && (
         <div className="alert alert-success">{success_message.message}</div>
       )}

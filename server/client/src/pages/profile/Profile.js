@@ -6,6 +6,7 @@ import {
   handleUserChange,
   clearValues,
   getUserPlans,
+  increasePage,
 } from "../../features/plans/planSlice";
 
 import CardItemsList from "../../components/cardItemsList/CardItemsList";
@@ -20,7 +21,7 @@ const Profile = () => {
     (store) => store.plan
   );
   const dispatch = useDispatch();
-
+  console.log(user_queries.currentItemsQty);
   useEffect(() => {
     dispatch(getUserPlans(user));
   }, []);
@@ -143,7 +144,7 @@ const Profile = () => {
             type="button"
             onClick={() => cancelSearchHandler()}
           >
-            Cancel
+            Reset
           </button>
           <button className="btn" type="submit">
             Search
@@ -153,6 +154,17 @@ const Profile = () => {
       <div className="home-list">
         <CardItemsList plans={user_plans} />
       </div>
+      {user_queries.currentItemsQty === 20 && (
+        <div
+          className="btn more-plans-btn"
+          onClick={() => {
+            dispatch(increasePage(user.user.id));
+            dispatch(getUserPlans());
+          }}
+        >
+          <h5>More</h5>
+        </div>
+      )}
     </div>
   );
 };

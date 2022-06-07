@@ -5,6 +5,7 @@ const votesService = require("../models/votes.service");
 
 const asyncErrorBoundary = require("../middleware/asyncErrorBoundary");
 const moment = require("moment");
+moment.suppressDeprecationWarnings = true;
 
 // VALIDATORS
 

@@ -32,3 +32,11 @@
     align-items: center;
     margin-bottom: 2rem;
 }
+
+.more-plans-btn{
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
