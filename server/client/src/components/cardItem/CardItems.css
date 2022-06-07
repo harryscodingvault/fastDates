@@ -23,8 +23,9 @@
     }
 }
 
-.cardItem-text-group p, .cardItem-text-group h4, .cardItem-text-group h5{
+.cardItem-text-group>p, .cardItem-text-group>h4, .cardItem-text-group>h5{
     margin: 0.5rem;
+    cursor: pointer;
 }
 .cardItem-text-group span{
     color: var(--primary-500);
@@ -73,6 +74,7 @@
 .cardItem-destinations-container{
     width: 100vw;
     padding: 0 1rem;
+    
 }
 
 @media screen and  (min-width:600px) {
@@ -91,7 +93,12 @@
 .cardItem-destinations-container li p, .cardItem-destinations-container li h5{
     margin: 0.5rem 0;
     padding: 0;
+    
 }
+.cardItem-destinations-list{
+    cursor: pointer;
+}
+
 
 .cardItem-edit-btn-group{
     width: 100%;

@@ -114,11 +114,13 @@ const CardItem = ({ data }) => {
           Duration: <span>{plan_duration}h</span>
         </h5>
       </div>
-      <div
-        className="cardItem-destinations-container"
-        onClick={() => externalLinkHandler()}
-      >
-        <ul className="cardItem-destinations-list">{mapDestinations}</ul>
+      <div className="cardItem-destinations-container">
+        <ul
+          className="cardItem-destinations-list"
+          onClick={() => externalLinkHandler()}
+        >
+          {mapDestinations}
+        </ul>
       </div>
 
       {user?.user.id === data.user_id && (

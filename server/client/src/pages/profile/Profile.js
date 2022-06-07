@@ -48,14 +48,13 @@ const Profile = () => {
         <div className="profile-text-group">
           <h5>
             <span>Username:</span>
+            {user.user.username}
           </h5>
-          <h5>{user.user.username}</h5>
-        </div>
-        <div className="profile-text-group">
+
           <h5>
             <span>Email:</span>
+            {user.user.email}
           </h5>
-          <h5>{user.user.email}</h5>
         </div>
         <button className="btn" onClick={() => navigate("/profile/edit")}>
           Edit Profile

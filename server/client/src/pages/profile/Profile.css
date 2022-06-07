@@ -11,14 +11,29 @@
 .profile-text-group{
     display:flex;
     flex-direction:column;
-    margin-bottom: 2rem;
     width: 100%;
-    align-items:center;
-    justify-content: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
 }
+
+.profile-text-group>h5{
+    display:flex;
+    flex-direction:column;
+    width: 100%;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+}
+
 @media screen and  (min-width:600px) {
-    .profile-text-group{
+    .profile-text-group>h5{
+        display:flex;
         flex-direction:row;
+        max-width:600px;
+        justify-content: space-between;
+        padding-bottom: 1rem;
+    }
+    .profile-text-group>h5>span{
+        margin-right: 1rem;
     }
 }
 
