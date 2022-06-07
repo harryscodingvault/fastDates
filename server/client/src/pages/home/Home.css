@@ -28,6 +28,7 @@
     background-color: var(--grey-900);
     border: 0;
     width: 95%;
+    margin-bottom: 2rem;
 }
 @media screen and  (min-width:600px) {
     .home-search-form{
