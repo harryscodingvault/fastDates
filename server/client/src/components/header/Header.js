@@ -14,26 +14,28 @@ const Header = () => {
       <div className="title" onClick={() => navigate("/")}>
         <h2> FastDates </h2>
       </div>
-      {user && (
-        <div className="header-nav" onClick={() => navigate("/profile")}>
-          <h5>Profile</h5>
-        </div>
-      )}
-      {user ? (
-        <div
-          className="header-nav"
-          onClick={() => {
-            dispatch(logoutUser());
-            navigate("/");
-          }}
-        >
-          <h5>Logout</h5>
-        </div>
-      ) : (
-        <div className="header-nav" onClick={() => navigate("/login")}>
-          <h5>Login</h5>
-        </div>
-      )}
+      <div className="header-user-group">
+        {user && (
+          <div className="header-nav" onClick={() => navigate("/profile")}>
+            <h5>Profile</h5>
+          </div>
+        )}
+        {user ? (
+          <div
+            className="header-nav"
+            onClick={() => {
+              dispatch(logoutUser());
+              navigate("/");
+            }}
+          >
+            <h5>Logout</h5>
+          </div>
+        ) : (
+          <div className="header-nav" onClick={() => navigate("/login")}>
+            <h5>Login</h5>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
