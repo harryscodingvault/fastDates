@@ -25,10 +25,12 @@ const initialState = {
     duration_2: 10,
     location: "",
     currentPage: 1,
+    prevPage: 1,
     currentItemsQty: null,
   },
   currentPlan: {},
   currentPage: 1,
+  prevPage: 1,
   currentItemsQty: null,
   timeOptions: ["week", "month", "year"],
   time: "year",
@@ -182,9 +184,11 @@ const planSlice = createSlice({
     },
     increasePage: (state, { payload }) => {
       if (payload) {
+        state.user_queries.prevPage = state.user_queries.currentPage;
         state.user_queries.currentPage =
           parseInt(state.user_queries.currentPage) + 1;
       }
+      state.prevPage = state.currentPage;
       state.currentPage = parseInt(state.currentPage) + 1;
     },
   },
@@ -195,7 +199,7 @@ const planSlice = createSlice({
     },
     [getAllPlans.fulfilled]: (state, { payload }) => {
       const { plans, paginate } = payload.data;
-      if (state.plans.length > 0 && state.currentPage !== 1) {
+      if (state.plans.length > 0 && state.currentPage > state.prevPage) {
         state.plans = [...state.plans, ...plans];
       } else {
         state.plans = plans;
@@ -219,7 +223,10 @@ const planSlice = createSlice({
     },
     [getUserPlans.fulfilled]: (state, { payload }) => {
       const { plans, paginate } = payload.data;
-      if (state.user_plans.length > 0 && state.user_queries.currentPage !== 1) {
+      if (
+        state.user_plans.length > 0 &&
+        state.user_queries.currentPage > state.user_queries.prevPage
+      ) {
         state.plans = [...state.user_plans, ...plans];
       } else {
         state.user_plans = plans;

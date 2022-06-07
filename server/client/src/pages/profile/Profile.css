@@ -15,11 +15,12 @@
     width: 100%;
     align-items:center;
     justify-content: center;
+    
    
 }
-.profile-text-group h5{
+.profile-text-group>h5{
     margin: 0 auto;
-    
+    text-transform: none;
 }
 
 .profile-text-group span{
