@@ -6,51 +6,77 @@
     align-items: center;
     margin-top: 5rem;
 }
-.home-container .home-btn{
+.home-container>.home-btn{
     margin-bottom: 2rem;
     width: 80%;
 }
+
+@media screen and  (min-width:600px) {
+    .home-container>.home-btn{
+        margin-bottom: 2rem;
+        width: 300px;
+    }
+}
+
 .home-container .home-btn h5{
     margin: 0;
     padding: 0;
 }
 
+
 .home-search-form{
     background-color: var(--grey-900);
     border: 0;
-    width: 100%;
-}
-.search-location{
     width: 95%;
+}
+@media screen and  (min-width:600px) {
+    .home-search-form{
+    display: flex;
+    flex-flow: row wrap;
+     height: 100%;
+    }
+}
+.home-block{
     display: flex;
     flex-direction: column;
+    width: 95%;
     
 }
 
-.search-location .form-row{
-    width: 100%;
+@media screen and  (min-width:600px) {
+    .home-block{
+        flex-direction: row;
+        flex: 100%;
+    }
 }
 
-
-.home-select-group{
-    width: 95%;
-    display: flex;
-    flex-direction: column;
-    justify-content:space-between;
-}
-
-
-.home-select-group .time-select{
+.search-location {
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-}
-.home-select-group .time-select .select-label{
-   margin-bottom: 0.5rem;
 }
 
+.search-location>.form-row,input {
+    width: 100%;
+}
 
+@media screen and  (min-width:600px) {
+    .search-location {
+        width: 95%;
+        margin: 0.5rem;
+    }
+}
+
+.time-select{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+@media screen and  (min-width:600px) {
+    .time-select{
+        margin: 0.5rem;
+    }
+}
 
 .duration-select-group{
     display: flex;
@@ -58,7 +84,17 @@
    flex-wrap: wrap;
    justify-content:space-between;
    align-items:center;
+   height: 50%;
+   width: 95%;
 }
+@media screen and  (min-width:600px) {
+    .duration-select-group{
+        flex: 45%;
+        margin: 0.5rem;
+    }
+}
+
+
 .duration-select-group .select-label:nth-child(1){
     width: 100%;
 }
@@ -72,17 +108,9 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-
 }
 
-.home-input-group .home-input-city{
-    width:65%;
-    
-}
-.home-input-group .home-input-state{
-    width: 30%;
-    
- }
+
 
 .home-list{
     width: 100%;
@@ -96,7 +124,19 @@
     justify-content: space-around;
 }
 
-.home-search-btn-group .btn{
+.home-search-btn-group>.btn{
    width: 40%;
 }
 
+@media screen and  (min-width:600px) {
+    .home-search-btn-group{
+      flex:50%;
+      height: 4rem;
+      align-items: flex-end;
+    }
+    .home-search-btn-group>.btn{
+        width:40%;
+       padding: 0;
+       margin: 0;
+     }
+}
